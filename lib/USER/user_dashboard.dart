@@ -1,5 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:public_issue_management/USER/complaint.dart';
+import 'package:public_issue_management/USER/profile.dart';
+import 'package:public_issue_management/USER/view_complaint.dart';
+import 'package:public_issue_management/login.dart';
 
 class User_board extends StatelessWidget {
   const User_board({super.key});
@@ -31,7 +35,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return  Scaffold(
        appBar: AppBar(  
         title: Text("Complaint Management"),  
-        backgroundColor: Colors.teal,  
+        backgroundColor: Colors.lightBlueAccent,
+         leading:IconButton(onPressed:(){
+           Navigator.of(context).push(MaterialPageRoute(
+               builder: (context) => LoginPage(),
+           ));
+         },
+             icon: Icon(Icons.arrow_back)),
       ),  
         body: Column(
           children: [
@@ -40,16 +50,68 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Text( "User Dashboard",
+              child: Text( "USER DASHBOARD",
               style:TextStyle(
-                fontSize:20,
+                fontSize:25,
                 fontWeight:FontWeight.bold,
-                color:Colors.teal
+                color:Colors.lightBlueAccent
               ),),
-            ), SizedBox(
+            ),
+            Padding(
+              padding: const EdgeInsets.all(26.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                     onTap: () {
+
+                     },
+                    child: Column(
+
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: AssetImage("images/user.png"),
+                        ),
+                        SizedBox(height: 15,),
+                        Text("Profile",style: TextStyle(
+                          color: Colors.lightBlueAccent,
+                          fontSize: 20,
+                        )
+                          ,),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:30.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Complaint(),
+                        ));
+                      },
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage: AssetImage("images/complaint.png"),
+                          ),
+                          SizedBox(height: 15,),
+                          Text("Complaint",style: TextStyle(
+                            color: Colors.lightBlueAccent,
+                            fontSize: 20,
+                          )
+                            ,),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
               height: 40,
             ),
-            GridView.count(
+           /* GridView.count(
               shrinkWrap: true,
               crossAxisCount: 3,
               children: [
@@ -57,11 +119,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   (i) => Column(
                     mainAxisSize: MainAxisSize.min,
 
-                    children: [GestureDetector(
+                    children: [
+                      InkWell(
                        onTap: () {
-                            
-                          },
-                              child: Container(),
+
+                    //     _goToPage(category.id);
+                       },
                        ),
                       Material(
                         shape: CircleBorder(),
@@ -89,11 +152,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   ),
                 ),
               ],
-            ),
+            ),*/
           ],
         ),
       );
-   
-                                    
+
+
   }
-}  
+
+}
