@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/COMPANY/Workers/Comp_Model/model_worker.dart';
 import 'package:public_issue_management/COMPANY/Workers/add_worker.dart';
+import 'package:public_issue_management/COMPANY/Workers/update_worker.dart';
 import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
 
 class ManageWorkers extends StatefulWidget {
@@ -53,11 +54,40 @@ class _ManageWorkersState extends State<ManageWorkers> {
                   itemCount: Workers_id.length,
                   itemBuilder: (context,index){
                     return Card(
-                      child: ListTile(
-                        title: Text("Id:" +model[index].Workers_id.toString()),
-                        subtitle:Text("Name:"+model[index].Workers_name),
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                crossAxisAlignment:CrossAxisAlignment.start,
+                                children: [
+                                  Text("Id:" +model[index].Workers_id.toString(),
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    ) ,),
+                                  Text("Name:"+model[index].Workers_name,
+                                      style:TextStyle(
+                                        fontSize: 18,
+                                      )),
+                                ],
+                              ),
+                            ),
+                             Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 20),
+                               child: ElevatedButton(onPressed: (){},
+                                  child: Text("Remove")),
+                             ),
+                            SizedBox(width: 8,),
+                            ElevatedButton(onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => UpdateWorker(),
+                              ));
+                            },
+                                child: Text("Update"))
+                            ],
 
-
+                        ),
                       ),
                     );
                   },

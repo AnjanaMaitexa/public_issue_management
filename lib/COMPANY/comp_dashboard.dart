@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:public_issue_management/COMPANY/manage_complaints.dart';
+import 'package:public_issue_management/COMPANY/COMPLAINTS/manage_complaints.dart';
 import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
-import 'package:public_issue_management/COMPANY/tender_manage.dart';
+import 'package:public_issue_management/COMPANY/TENDER/tender_manage.dart';
 import 'package:public_issue_management/COMPANY/view_task.dart';
 
 class Dashboard extends StatefulWidget {
