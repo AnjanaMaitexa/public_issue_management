@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:public_issue_management/COMPANY/manage_complaints.dart';
+import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
+import 'package:public_issue_management/COMPANY/tender_manage.dart';
+import 'package:public_issue_management/COMPANY/view_task.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -15,7 +19,28 @@ class _DashboardState extends State<Dashboard> {
         child: Container(
           decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
           child:  InkWell(
-            onTap: () {},
+            onTap: () {
+              if(title=='TenderManage'){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TenderManage(),
+                ));
+              }else if(title=='ManageWorkers'){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ManageWorkers(),
+                ));
+              }else if(title=='ManageComplaints'){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ManageComplaint(),
+                ));
+              }else if(title=='ViewTask'){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Viewtask(),
+                ));
+              }else{
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TenderManage(),));
+              }
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -45,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text("Complaint Management"),
        /// elevation: .1,
-        backgroundColor: Color.fromRGBO(49, 87, 110, 1.0),),
+        backgroundColor: Colors.lightBlueAccent,),
        body: Column(
          children: [ 
           SizedBox(
@@ -57,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
               style:TextStyle(
                 fontSize:20,
                 fontWeight:FontWeight.bold,
-                color:Colors.teal
+                color:Colors.lightBlueAccent
               ),),
             ), SizedBox(
               height: 40,

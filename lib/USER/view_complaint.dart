@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/USER/Model/complaint_model.dart';
+import 'package:public_issue_management/USER/complaint.dart';
+import 'package:public_issue_management/USER/user_dashboard.dart';
 
 class View_Comp extends StatelessWidget {
   const View_Comp({super.key});
@@ -9,7 +11,8 @@ class View_Comp extends StatelessWidget {
   Widget build(BuildContext context) {
      return MaterialApp(
     title: 'User Dashboard',
-      home:view_complaint()
+       debugShowCheckedModeBanner: false,
+      home:view_complaint(),
     );
   }
 }
@@ -31,10 +34,29 @@ final List<complaint_model>model=List.generate(complaints.length, (index)
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      appBar: AppBar(
+        title: Text("Complaint Management"),
+        backgroundColor: Colors.lightBlueAccent,
+        leading:IconButton(onPressed:(){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => User_board(),
+          ));
+        },
+            icon: Icon(Icons.arrow_back)),
+      ),
       body: Container(
         child: Column(
           children:<Widget> [
-               Text("Complaints"),
+
+               Padding(
+                 padding: const EdgeInsets.only(top:15.0),
+                 child: Text("Complaints",style: TextStyle(
+                   fontSize:26,
+                   fontWeight: FontWeight.bold,
+                   color:Colors.lightBlueAccent
+                 ),),
+               ),
+               SizedBox(height:20),
                ListView.builder(
                  shrinkWrap:true,
             itemCount: complaints.length,
@@ -52,7 +74,11 @@ final List<complaint_model>model=List.generate(complaints.length, (index)
 
       ),
        floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Complaint(),
+          ));
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), 

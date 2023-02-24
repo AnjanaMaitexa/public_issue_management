@@ -1,6 +1,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
 import 'package:public_issue_management/dashboard.dart';
 
@@ -15,7 +16,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home:Scaffold(
+
         backgroundColor: Colors.lightBlueAccent,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => User_board(),));
+                                builder: (context) => Dashboard(),));
                             },
                             child: Text(
                               "LOGIN",
