@@ -25,7 +25,8 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
- 
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +43,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          
+
             Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Text( "REGISTER",
@@ -60,10 +61,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: TextField(
               decoration: InputDecoration(
                 hintText:"Name" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
            SizedBox(
@@ -75,10 +76,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               maxLines: 2,
               decoration: InputDecoration(
                 hintText:"Address" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
           SizedBox(
@@ -89,10 +90,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: TextField(
               decoration: InputDecoration(
                 hintText:"Email" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
            SizedBox(
@@ -103,10 +104,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: TextField(
               decoration: InputDecoration(
                 hintText:"Phone" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
            SizedBox(
@@ -117,10 +118,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: TextField(
               decoration: InputDecoration(
                 hintText:"Password" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
            SizedBox(
@@ -131,10 +132,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: TextField(
               decoration: InputDecoration(
                 hintText:"Confirm Password" ,
-                border: 
+                border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            
+
             ),
           ),
           SizedBox(
@@ -158,7 +159,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 fontWeight:FontWeight.bold,
                 color: Colors.white),
               ),
-            
+
               ),
             ),
           ),
@@ -168,24 +169,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child:RichText(
-               text: TextSpan(  
-        text: 'Already have an account?',  
-        style: TextStyle(color: Colors.black, fontSize: 16),  
-        children: <TextSpan>[  
-            TextSpan(text: ' Sign In',  
+               text: TextSpan(
+        text: 'Already have an account?',
+        style: TextStyle(color: Colors.black, fontSize: 16),
+        children: <TextSpan>[
+            TextSpan(text: ' Sign In',
                 style: TextStyle(color: Colors.blueAccent, fontSize: 16),
                 recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage(),));
-                }    
-            )  
-        ]  
-    ),  
-            
+                }
+            )
+        ]
+    ),
+
               ),
             ),
         ],
-      
+
       ),
       ),
     );

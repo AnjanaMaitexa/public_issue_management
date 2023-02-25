@@ -14,9 +14,10 @@ class _ViewtaskState extends State<Viewtask> {
 
   static List<String>task=["task1","task2","task3"];
   static List<String>details=['descriptipn1','descriptipn2','descriptipn3',];
+  static List<String>status=['done','progress','progress',];
 
   final List<Task>model=List.generate(task.length, (index)
-  => Task(task[index],details[index],));
+  => Task(task[index],details[index],status[index]));
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,18 +53,24 @@ class _ViewtaskState extends State<Viewtask> {
                       child: Container(
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment:CrossAxisAlignment.start,
+                          child: Row(
                             children: [
-                              Text("Task:" +model[index].task,
-                                style:TextStyle(
-                                  fontSize: 18,
-                                ) ,),
-                              Text("Description:"+model[index].details,
-                                  style:TextStyle(
-                                    fontSize: 18,
-                                  )),
+                              Column(
+                                crossAxisAlignment:CrossAxisAlignment.start,
+                                children: [
+                                  Text("Task:" +model[index].task,
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    ) ,),
+                                  Text("Description:"+model[index].details,
+                                      style:TextStyle(
+                                        fontSize: 18,
+                                      )),
+                                ],
+                              ),
+
                             ],
+
                           ),
                         ),
                       ),

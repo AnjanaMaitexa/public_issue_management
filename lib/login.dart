@@ -2,6 +2,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
+import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
 import 'package:public_issue_management/dashboard.dart';
 
@@ -74,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextField(
                           decoration: InputDecoration(
                             hintText: "Password",
+                            suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.black54,),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
@@ -108,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Dashboard(),));
+                                builder: (context) => Depart_Board(),));
                             },
                             child: Text(
                               "LOGIN",
