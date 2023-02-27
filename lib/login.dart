@@ -14,6 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String uname="user";
+  String cname="company";
+  String depart ="depart";
+
+  final email = TextEditingController();
+  final pwd = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -60,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal:10.0),
                         child: TextField(
+                          controller: email,
                           decoration: InputDecoration(
                             hintText: "Email/Username",
                             border: OutlineInputBorder(
@@ -73,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: TextField(
+                          controller: pwd,
                           decoration: InputDecoration(
                             hintText: "Password",
                             suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.black54,),
@@ -109,8 +117,18 @@ class _LoginPageState extends State<LoginPage> {
                           width: MediaQuery.of(context).size.width,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Depart_Board(),));
+                              if(pwd.text=="user"){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => User_board(),));
+                              }else if(pwd.text=="company"){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Dashboard(),));
+                              }else if(pwd.text=="depart"){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Depart_Board(),));
+                              }
+                             /* Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Depart_Board(),));*/
                             },
                             child: Text(
                               "LOGIN",
