@@ -73,12 +73,12 @@ class _ManageComplaintState extends State<ManageComplaint> {
                               ],
                             ),
 
-                            ElevatedButton(onPressed: (){},
+                         /*   ElevatedButton(onPressed: (){},
                                 child: Text("APPROVE")),
                             ElevatedButton(onPressed: (){
 
                             },
-                                child: Text("REJECT"))
+                                child: Text("REJECT"))*/
                           ],
 
                         ),

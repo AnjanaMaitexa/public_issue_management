@@ -12,6 +12,7 @@ class Viewtask extends StatefulWidget {
 
 class _ViewtaskState extends State<Viewtask> {
 
+  final TextEditingController _reply = TextEditingController();
   static List<String>task=["task1","task2","task3"];
   static List<String>details=['descriptipn1','descriptipn2','descriptipn3',];
   static List<String>status=['done','progress','progress',];
@@ -68,6 +69,44 @@ class _ViewtaskState extends State<Viewtask> {
                                       )),
                                 ],
                               ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: ElevatedButton(onPressed: (){
+                                  showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (BuildContext ctx) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 20,
+                                              left: 20,
+                                              right: 20,
+                                              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              TextField(
+                                                controller: _reply,
+                                                decoration: const InputDecoration(labelText: 'Reply'),
+                                              ),
+
+                                              const SizedBox(height: 20),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(MaterialPageRoute(
+                                                    builder: (context) => Viewtask(),
+                                                  ));
+                                                  },
+                                                child: const Text('Reply'),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                },
+                                    child: Text("Reply")),
+                              ),
 
                             ],
 
@@ -83,4 +122,5 @@ class _ViewtaskState extends State<Viewtask> {
 
       ), );
   }
+
 }

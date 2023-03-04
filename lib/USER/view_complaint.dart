@@ -27,9 +27,10 @@ class _view_complaintState extends State<view_complaint> {
 
 static List<String>complaints=['Water Supply issue','Draianage','Electric Line',];
 static List<String>desc=['Water is stopped','Drainage overflow','Broken',];
+static List<String>status=['Done','Progress','Done',];
 
 final List<complaint_model>model=List.generate(complaints.length, (index)
- => complaint_model(complaints[index],desc[index],));
+ => complaint_model(complaints[index],desc[index],status[index]));
 //pass data to the data model
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,8 @@ final List<complaint_model>model=List.generate(complaints.length, (index)
               return Card(
             child: ListTile(
               title: Text(model[index].complaints),
-              subtitle:Text(model[index].desc), 
+              subtitle:Text(model[index].desc),
+              trailing:Text(model[index].status)
               
             ),
               );

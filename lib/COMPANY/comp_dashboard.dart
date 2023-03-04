@@ -15,6 +15,7 @@ class _DashboardState extends State<Dashboard> {
   Card makeDashboardItem(String title, IconData icon) {
     return Card(
          elevation: 1.0,
+
         margin: EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
@@ -69,6 +70,12 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Complaint Management"),
+        leading:IconButton(onPressed:(){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Dashboard(),
+          ));
+        },
+            icon: Icon(Icons.arrow_back)),
        /// elevation: .1,
         backgroundColor: Colors.lightBlueAccent,),
        body: Column(

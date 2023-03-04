@@ -5,6 +5,7 @@ import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
 import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
 import 'package:public_issue_management/dashboard.dart';
+import 'package:public_issue_management/forgot_pwd.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -97,7 +98,10 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal:20.0),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Forgot(),));
+                          },
                           child: Text(
                             "Forgot Password?",
                             style: TextStyle(fontSize: 16, color: Colors.lightBlueAccent),

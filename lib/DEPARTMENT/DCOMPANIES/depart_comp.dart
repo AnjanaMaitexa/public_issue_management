@@ -54,26 +54,41 @@ class _Company_departState extends State<Company_depart> {
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment:CrossAxisAlignment.start,
+                        child: Row(
                           children: [
-                            Text(model[index].name,
-                              style:TextStyle(
-                                fontSize: 18,
-                              ) ,),
-                            Text(model[index].address,
-                                style:TextStyle(
-                                  fontSize: 18,
-                                )),
-                            Text(model[index].email,
-                                style:TextStyle(
-                                  fontSize: 18,
-                                )),
-                            Text(model[index].phone,
-                                style:TextStyle(
-                                  fontSize: 18,
-                                )),
+                            Column(
+                              crossAxisAlignment:CrossAxisAlignment.start,
+                              children: [
+                                Text(model[index].name,
+                                  style:TextStyle(
+                                    fontSize: 18,
+                                  ) ,),
+                                Text(model[index].address,
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                Text(model[index].email,
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                Text(model[index].phone,
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    )),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: ElevatedButton(onPressed: (){},
+                                  child: Text("Approve")),
+                            ),
+                            SizedBox(width: 8,),
+                            ElevatedButton(onPressed: (){
+
+                            },
+                                child: Text("Reject"))
                           ],
+
                         ),
                       ),
                     );

@@ -93,7 +93,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               ),
-
             ),
           ),
            SizedBox(
