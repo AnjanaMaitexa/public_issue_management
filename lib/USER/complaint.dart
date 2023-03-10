@@ -1,5 +1,8 @@
+/*
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:public_issue_management/USER/imagee.dart';
 import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,24 +28,27 @@ class _ComplaintState extends State<Complaint> {
   String? selectdepart;
   File? imageFile;
 
-
-  _openGallery(BuildContext context) async{
-    var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageFile = picture as File;
-
-    });
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+  _getFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    //  maxWidth: 1800,
+    //  maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+       imageFile = File(pickedFile.path);
+    }
   }
-  _openCamera(BuildContext context) async{
-    var picture = await ImagePicker().pickImage(source: ImageSource.camera);
-    setState(() {
-      imageFile = picture as File;
-    });
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+  _getFromCamera() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    //  maxWidth: 1800,
+     // maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+       imageFile = File(pickedFile.path);
+    }
   }
+
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -55,7 +61,9 @@ class _ComplaintState extends State<Complaint> {
                   GestureDetector(
                     child: const Text("Gallery"),
                     onTap: () {
-                      _openGallery(context);
+                      _getFromGallery();
+                      Navigator.pop(context);
+                    //  _openGallery(context);
                     },
                   ),
                   SizedBox(height:10),
@@ -63,7 +71,10 @@ class _ComplaintState extends State<Complaint> {
                   GestureDetector(
                     child: const Text("Camera"),
                     onTap: () {
-                      _openCamera(context);
+                      _getFromCamera();
+
+                      Navigator.pop(context);
+                   //   _openCamera(context);
                     },
                   ),
                 ],
@@ -74,13 +85,18 @@ class _ComplaintState extends State<Complaint> {
   }
   _decideImageView() {
     if (imageFile == null) {
-      return const Text("Image", style: TextStyle(
+      return
+        Image.asset("images/back.jpg", width: 200, height: 200,);
+      */
+/* const Text("Image", style: TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          color: Colors.teal));
+          color: Colors.teal));*//*
+
     }
     else {
       Image.file(imageFile!, width: 200, height: 200,);
+     // print("image printed");
     }
   }
   @override
@@ -236,7 +252,9 @@ class _ComplaintState extends State<Complaint> {
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
                            onPressed: () {
-                            _showChoiceDialog(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPage()));
+                            // MyPage();
+                        //  _showChoiceDialog(context);
                           },
 
                           child: const Text("Upload Image")),
@@ -249,4 +267,4 @@ class _ComplaintState extends State<Complaint> {
         ),
     );
   }
-}
+}*/

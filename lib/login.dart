@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home:Scaffold(
-
         backgroundColor: Colors.lightBlueAccent,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               ),
-
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
