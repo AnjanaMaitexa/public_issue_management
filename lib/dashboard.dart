@@ -5,9 +5,11 @@ import 'package:public_issue_management/DEPARTMENT/dep_register.dart';
 import 'package:public_issue_management/USER/register.dart';
 import 'package:public_issue_management/login.dart';
 
+/*
 void main() {
   runApp(const MainDash());
 }
+*/
 
 class MainDash extends StatelessWidget {
   const MainDash({super.key});

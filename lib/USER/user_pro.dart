@@ -1,12 +1,62 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
 import 'package:public_issue_management/Widgets/background.dart';
 import 'package:public_issue_management/Widgets/password-input.dart';
 import 'package:public_issue_management/Widgets/text-field-input.dart';
+import 'package:public_issue_management/api.dart';
 import 'package:public_issue_management/utils.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+ // TextEditingController usernameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phnController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  late String loginid;
+  late String name;
+  late String address;
+  late String phn;
+  late String email;
+  late String username;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _viewPro();
+  }
+  _viewPro()async {
+    var data = {
+      "login_id": loginid
+    };
+
+    var res = await Api().authData(data, '/signup/view-all-users');
+    var body = json.decode(res.body);
+
+    if(body['success']==true)
+    {
+      nameController.text= (json.encode(body['name'])).toString();
+      addressController.text= (json.encode(body['role'])).toString();
+      phnController.text= (json.encode(body['role'])).toString();
+      emailController.text= (json.encode(body['role'])).toString();
+
+    }
+    else
+    {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,45 +90,42 @@ class EditProfile extends StatelessWidget {
                 Column(
                   children: [
                     TextInputField(
+                      controller: nameController,
                       icon: Icons.person,
                       hint: 'Name',
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
+                      controller: emailController,
                       icon: Icons.email,
                       hint: 'Email',
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
-                    PasswordInput(
-                      icon: Icons.lock,
-                      hint: 'Password',
+                   /* TextInputField(
+                      controller: usernameController,
+                      icon: Icons.person_outlined,
+                      hint: 'User',
+                      inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
-                    PasswordInput(
-                      icon:Icons.lock,
-                      hint: 'Confirm Password',
-                      inputAction: TextInputAction.next,
-                    ),
+*/
                     TextInputField(
+                      controller: addressController,
                       icon: Icons.location_history_outlined,
                       hint: 'Address',
                       inputType: TextInputType.text,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
+                      controller: phnController,
                       icon: Icons.phone,
                       hint: 'Phone no.',
                       inputType: TextInputType.number,
                       inputAction: TextInputAction.next,
                     ),
-                    TextInputField(
-                      icon: Icons.location_on_outlined,
-                      hint: 'Location',
-                      inputType: TextInputType.text,
-                      inputAction: TextInputAction.next,
-                    ),
+
                     SizedBox(
                       height: 25,
                     ),

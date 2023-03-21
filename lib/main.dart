@@ -1,7 +1,11 @@
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:public_issue_management/dashboard.dart';
+import 'package:public_issue_management/forgot_pwd.dart';
 import 'package:public_issue_management/login.dart';
+import 'package:public_issue_management/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,17 +16,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-       primarySwatch: Colors.lightBlue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        initialRoute: '/splash_screen',
+        routes: {
+
+          '/splash_screen': (BuildContext context) => SplashScreen(),
+          '/forgot_pwd': (context) => Forgot(),
+          '/dashboard': (context) => MainDash(),
+        }
     );
   }
 }
 
+/*
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
  final String title;
@@ -65,4 +71,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
+}*/
