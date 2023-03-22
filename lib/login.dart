@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
@@ -17,78 +16,81 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
-
 }
 
-
 class _LoginPageState extends State<LoginPage> {
-
-  String user="2";
-  String company="1";
-  String depart ="3";
-  String status="";
-  String storedvalue="1";
+  String user = "2";
+  String company = "1";
+  String depart = "3";
+  String storedvalue = "1";
   late SharedPreferences localStorage;
-  String loginId='';
-  String role='';
+  String loginId = '';
+  String role = '';
+  String status = '';
   bool _isLoading = false;
   bool _obscureText = true;
 
   final email = TextEditingController();
   final pwd = TextEditingController();
-  _pressLoginButton() async
-  {
+  _pressLoginButton() async {
     setState(() {
       _isLoading = true;
     });
     var data = {
-      'username': email.text.trim(),//username for email
+      'username': email.text.trim(), //username for email
       'password': pwd.text.trim()
     };
-    var res = await Api().authData(data,'/sign_in');
+    var res = await Api().authData(data, '/sign_in');
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
+      //  String login=
+      role = json.encode(body['role']);
+      status = json.encode(body['status']);
 
-      role = (json.encode(body['role']));
-      status=(json.encode(body["status"]));
-
-      print(role);
-
-      String name = (json.encode(body['username']));
-      print("name $name");
-
-      if (role == company && status==storedvalue ) {
+      //  print('user ${user.runtimeType}');
+      //  print('role ${role.runtimeType}');
+      // print('user ${user}');
+      // print('role ${role}');
+      // print("------");
+      // print('storedvalue ${storedvalue}');
+      // print('status ${status}');
+      // print(user == role);
+      // print(status == storedvalue);
+      if (user == role.replaceAll('"', '') &&
+          storedvalue == status.replaceAll('"', '')) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => User_board()));
+      } else if (company == role.replaceAll('"', '') &&
+          storedvalue == status.replaceAll('"', '')) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Dashboard(),));
-      } else if (role == user && status==storedvalue) {
+          builder: (context) => Dashboard(),
+        ));
+      } else if (depart == role.replaceAll('"', '') &&
+          storedvalue == status.replaceAll('"', '')) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => User_board(),));
-      } else if (role == depart  && status==storedvalue) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Depart_Board(),));
-      }else{
+          builder: (context) => Depart_Board(),
+        ));
+      } else {
         Fluttertoast.showToast(
           msg: "Please wait for admin approval",
           backgroundColor: Colors.grey,
         );
       }
 
-       localStorage = await SharedPreferences.getInstance();
+      localStorage = await SharedPreferences.getInstance();
       localStorage.setString('role', role.toString());
       localStorage.setString(
-          'loginId', json.encode(body['loginId']).toString());
-
-    }
-    else
-    {
+          'loginId', json.encode(body['login_id']).toString());
+    } else {
       Fluttertoast.showToast(
         msg: body['message'].toString(),
         backgroundColor: Colors.grey,
       );
     }
-      }
-  String _password="";
+  }
+
+  String _password = "";
 
   @override
   void dispose() {
@@ -97,19 +99,21 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement dispose
     super.dispose();
   }
+
   // Toggles the password show status
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:WillPopScope(
-        onWillPop: ()=>_ExitDialog(context),
+      home: WillPopScope(
+        onWillPop: () => _ExitDialog(context),
         child: Scaffold(
           backgroundColor: Colors.lightBlueAccent,
           body: Form(
@@ -119,38 +123,41 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(
-                    top: 60.0,left: 30.0,right: 30.0,bottom: 30.0),
+                      top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children:<Widget> [
+                    children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top:70.0),
-                        child: Text("Login",
-                          style:TextStyle(color:Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w700) ,),
+                        padding: const EdgeInsets.only(top: 70.0),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700),
+                        ),
                       )
                     ],
                   ),
-                  ),
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0),
-                        )
-                      ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            topRight: Radius.circular(40.0),
+                          )),
                       child: Column(
                         children: [
                           SizedBox(
-                            height:80,
+                            height: 80,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
                             child: TextField(
                               controller: email,
                               decoration: InputDecoration(
@@ -164,33 +171,40 @@ class _LoginPageState extends State<LoginPage> {
                             height: 10,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
                             child: TextField(
                               obscureText: _obscureText,
                               controller: pwd,
                               decoration: InputDecoration(
                                 hintText: "Password",
-                                suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.black54,),
+                                suffixIcon: Icon(
+                                  Icons.remove_red_eye_outlined,
+                                  color: Colors.black54,
+                                ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20)),
                               ),
-                             // obscureText: _obscureText,
+                              // obscureText: _obscureText,
                             ),
-
                           ),
                           SizedBox(
-                            height:20,
+                            height: 20,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Forgot(),));
+                                  builder: (context) => Forgot(),
+                                ));
                               },
                               child: Text(
                                 "Forgot Password?",
-                                style: TextStyle(fontSize: 16, color: Colors.lightBlueAccent),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.lightBlueAccent),
                               ),
                             ),
                           ),
@@ -198,17 +212,18 @@ class _LoginPageState extends State<LoginPage> {
                             height: 20,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 30.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
                                   color: Colors.lightBlueAccent),
-                              height:50,
+                              height: 50,
                               width: MediaQuery.of(context).size.width,
                               child: TextButton(
                                 onPressed: () {
                                   _pressLoginButton();
-   },
+                                },
                                 child: Text(
                                   "LOGIN",
                                   style: TextStyle(
@@ -223,19 +238,24 @@ class _LoginPageState extends State<LoginPage> {
                             height: 30,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 30.0),
                             child: RichText(
                               text: TextSpan(
                                   text: 'Don\t have an account?',
-                                  style: TextStyle(color: Colors.lightBlueAccent, fontSize: 16),
+                                  style: TextStyle(
+                                      color: Colors.lightBlueAccent,
+                                      fontSize: 16),
                                   children: <TextSpan>[
                                     TextSpan(
                                         text: ' Sign Up',
-                                        style:
-                                        TextStyle(color: Colors.blueAccent, fontSize: 16),
+                                        style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 16),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
-                                            Navigator.of(context).push(MaterialPageRoute(
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
                                               builder: (context) => MainDash(),
                                             ));
                                           })
@@ -259,6 +279,4 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _ExitDialog(BuildContext context) {}
-
-
 }

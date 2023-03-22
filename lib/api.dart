@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Api{
-
+class Api {
   final String _url = "http://192.168.19.175:3000";
 
   authData(data, apiUrl) async {
@@ -12,6 +11,7 @@ class Api{
       body: data,
     );
   }
+
   getData(apiUrl) async {
     var fullUrl = _url + apiUrl;
     // await _getToken();
