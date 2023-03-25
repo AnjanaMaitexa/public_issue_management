@@ -82,6 +82,10 @@ class _LoginPageState extends State<LoginPage> {
       localStorage.setString('role', role.toString());
       localStorage.setString(
           'loginId', json.encode(body['login_id']).toString());
+
+
+     String  loginid = (localStorage.getString('login_id') ?? '');
+     print(loginid);
     } else {
       Fluttertoast.showToast(
         msg: body['message'].toString(),
