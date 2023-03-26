@@ -27,30 +27,24 @@ class _EditProfileState extends State<EditProfile> {
   late String username;
   late SharedPreferences prefs;
   @override
-  void initState() {
-    // TODO: implement initState
+  Future<void> initState() async {
     super.initState();
+    prefs = await SharedPreferences.getInstance();
+    loginid = (prefs.getString('login_id') ?? '');
+    print('login_idupdate ${loginid}');
     _viewPro();
   }
-
-  _viewPro() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      loginid = (prefs.getString('login_id') ?? '');
-      loginid = loginid.replaceAll(new RegExp(r'[^\w\s]+'), '');
-      print(loginid);
-    });
-
-    var res = await Api().getData('/signup/user-profile/' + loginid);
-    var body = json.decode(res.body);
-    print(body);
-    setState(() {
-      name = body['data'][0]['name'];
-      print(name);
-      address = body['data'][0]['address'];
-      phn = body['data'][0]['phone'];
-      email = body['data'][0]['email'];
-    });
+  Future<void> _viewPro() async {
+  var res = await Api().getData('/signup/user-profile/' + loginid.replaceAll('"', ''));
+     var body = json.decode(res.body);
+     print(body);
+     setState(() {
+       name = body['data']['name'];
+       print(name);
+       address = body['data']['address'];
+       phn = body['data']['phone'];
+       email = body['data']['email'];
+     });
   }
 
   _update() async {
@@ -60,13 +54,13 @@ class _EditProfileState extends State<EditProfile> {
 
     var data = {
       "name": nameController.text,
-      //  "address": addressController.text,
+       "address": addressController.text,
       "email": emailController.text,
       "phone": phnController.text,
       "loginid": "641999eba522f06826048eea"
     };
     print(data);
-    var res = await Api().authData(data, 'signup/update-profile');
+    var res = await Api().authData(data, '/signup/update-profile');
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
@@ -124,14 +118,14 @@ class _EditProfileState extends State<EditProfile> {
                     TextInputField(
                       controller: nameController,
                       icon: Icons.person,
-                      hint: 'Name',
+                      hint: name,
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
                       controller: emailController,
                       icon: Icons.email,
-                      hint: 'Email',
+                      hint: email,
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
@@ -146,14 +140,14 @@ class _EditProfileState extends State<EditProfile> {
                     TextInputField(
                       controller: addressController,
                       icon: Icons.location_history_outlined,
-                      hint: 'Address',
+                      hint: address,
                       inputType: TextInputType.text,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
                       controller: phnController,
                       icon: Icons.phone,
-                      hint: 'Phone no.',
+                      hint: phn,
                       inputType: TextInputType.number,
                       inputAction: TextInputAction.next,
                     ),

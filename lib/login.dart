@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String status = '';
   bool _isLoading = false;
   bool _obscureText = true;
+  late String  loginid;
 
   final email = TextEditingController();
   final pwd = TextEditingController();
@@ -40,13 +41,23 @@ class _LoginPageState extends State<LoginPage> {
       'username': email.text.trim(), //username for email
       'password': pwd.text.trim()
     };
-    var res = await Api().authData(data, '/sign_in');
+    var res = await Api().authData(data,'/sign_in');
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
-      //  String login=
+      print(body);
+
       role = json.encode(body['role']);
       status = json.encode(body['status']);
+
+      localStorage = await SharedPreferences.getInstance();
+      localStorage.setString('role', role.toString());
+      localStorage.setString('login_id', json.encode(body['login_id']));
+
+      print('login_idss ${json.encode(body['login_id'])}');
+
+      /*loginid = (localStorage.getString('login_id') ?? '');
+      print(loginid);*/
 
       //  print('user ${user.runtimeType}');
       //  print('role ${role.runtimeType}');
@@ -78,14 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
 
-      localStorage = await SharedPreferences.getInstance();
-      localStorage.setString('role', role.toString());
-      localStorage.setString(
-          'loginId', json.encode(body['login_id']).toString());
 
-
-     String  loginid = (localStorage.getString('login_id') ?? '');
-     print(loginid);
     } else {
       Fluttertoast.showToast(
         msg: body['message'].toString(),

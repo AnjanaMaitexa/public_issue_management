@@ -23,6 +23,7 @@ class _TenderManageState extends State<TenderManage> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
 
         appBar: AppBar(
@@ -78,13 +79,13 @@ class _TenderManageState extends State<TenderManage> {
                               ),
                             ),
                             ElevatedButton(onPressed: (){},
-                                child: Text("Remove")),
+                                child: Text("Approve")),
                             ElevatedButton(onPressed: (){
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => UpdateTender(),
                               ));
                             },
-                                child: Text("Update"))
+                                child: Text("Reject"))
                           ],
 
                         ),
@@ -95,7 +96,7 @@ class _TenderManageState extends State<TenderManage> {
               ]),
 
         ),
-        floatingActionButton: FloatingActionButton(
+      /*  floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddTender(),
@@ -103,7 +104,7 @@ class _TenderManageState extends State<TenderManage> {
           },
           tooltip: 'Increment',
           child: const Icon(Icons.add),
-        ),
+        ),*/
       ),
     );
   }

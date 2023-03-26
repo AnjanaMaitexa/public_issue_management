@@ -23,6 +23,7 @@ class _ManageComplaintState extends State<ManageComplaint> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text("ManageComplaints"),

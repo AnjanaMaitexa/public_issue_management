@@ -5,6 +5,7 @@ import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:public_issue_management/Widgets/background.dart';
 import 'package:public_issue_management/login.dart';
 import 'package:public_issue_management/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User_board extends StatelessWidget {
   const User_board({super.key});
@@ -25,24 +26,38 @@ class User_board extends StatelessWidget {
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
- 
+
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  late SharedPreferences localStorage;
+ late String login_id;
    final myImageAndCaption = [
       ["images/user.png", "Profile"],
       ["images/complaint.png", "Complaint"],
+     ["images/complaint.png", "Logout"],
     ];
+   Future<void> getLogin() async {
+     localStorage = await SharedPreferences.getInstance();
+     login_id = (localStorage.getString('login_id') ?? '');
+     print('login_iddashboard ${login_id}');
+   }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLogin();
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
        appBar: AppBar(  
         title: Text("Complaint Management"),  
         backgroundColor: Colors.transparent,
-         leading:IconButton(onPressed:(){
+        /* leading:IconButton(onPressed:(){
            Navigator.of(context).push(MaterialPageRoute(
                builder: (context) => LoginPage(),
            ));
          },
-             icon: Icon(Icons.arrow_back)),
+             icon: Icon(Icons.arrow_back)),*/
       ),  
         body: Stack(
           children: [
@@ -103,6 +118,30 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               ),
                               SizedBox(height: 15,),
                               Text("Complaint",style: TextStyle(
+                                color:kWhite,
+                                fontSize: 20,
+                              )
+                                ,),
+                            ],
+                          ),
+                        ),
+                      ), Padding(
+                        padding: const EdgeInsets.only(left:30.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            localStorage.setBool('login', true);
+                            Navigator.pushReplacement(context,
+                                new MaterialPageRoute(builder: (context) => LoginPage()));
+
+                          },
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                child: Icon(Icons.logout),
+                              ),
+                              SizedBox(height: 15,),
+                              Text("Logout",style: TextStyle(
                                 color:kWhite,
                                 fontSize: 20,
                               )

@@ -71,7 +71,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       "phone": phnController.text,
       "email": emailController.text,
     };
-    var res = await Api().authData(data, '/signup/user');
+    var res = await Api().authData(data,'/signup/user');
     var body = json.decode(res.body);
 
     if(body['success']==true)

@@ -1,6 +1,10 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
+import 'package:public_issue_management/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateWorker extends StatefulWidget {
   const UpdateWorker({Key? key}) : super(key: key);
@@ -10,9 +14,46 @@ class UpdateWorker extends StatefulWidget {
 }
 
 class _UpdateWorkerState extends State<UpdateWorker> {
+  bool _isLoading = false;
+  late String name;
+  late String address;
+  late String phn;
+  late SharedPreferences localStorage;
+  late String worker_id;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phnController = TextEditingController();
+/*  Future<void> getLogin() async {
+    localStorage = await SharedPreferences.getInstance();
+    worker_id = (localStorage.getString('_id') ?? '');
+    print('worker_id ${worker_id}');
+  }*/
+  @override
+   initState()  {
+    // TODO: implement initState
+    super.initState();
+
+    _viewWorker();
+  }
+  Future<void> _viewWorker() async {
+    localStorage = await SharedPreferences.getInstance();
+    worker_id = (localStorage.getString('_id') ?? '');
+    print('worker_id ${worker_id}');
+    var res = await Api().getData('/worker/view-single-worker/' + worker_id);
+    var body = json.decode(res.body);
+    print(body);
+    setState(() {
+      name = body['data']['name'];
+      print(name);
+      address = body['data']['address'];
+      phn = body['data']['phone'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text("Update Workers"),
@@ -43,9 +84,10 @@ class _UpdateWorkerState extends State<UpdateWorker> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextField(
+                child: TextFormField(
+                  controller: nameController,
                   decoration: InputDecoration(
-                    hintText:"Workers Name" ,
+                    hintText:name ,
                     border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                   ),
@@ -57,10 +99,11 @@ class _UpdateWorkerState extends State<UpdateWorker> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextField(
+                child: TextFormField(
+                  controller: addressController,
                   maxLines: 2,
                   decoration: InputDecoration(
-                    hintText:"Address" ,
+                    hintText:address ,
                     border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                   ),
@@ -72,9 +115,10 @@ class _UpdateWorkerState extends State<UpdateWorker> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextField(
+                child: TextFormField(
+                  controller: phnController,
                   decoration: InputDecoration(
-                    hintText:"Phone" ,
+                    hintText:phn ,
                     border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                   ),

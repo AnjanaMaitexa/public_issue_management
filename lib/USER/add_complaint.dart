@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_storage_path/flutter_storage_path.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +20,7 @@ class _ComplaintState extends State<Complaint> {
   TextEditingController _descontroller = TextEditingController();
   TextEditingController _locontroller = TextEditingController();
   bool _isLoading = false;
-
+   late final _filename;
   late SharedPreferences prefs;
   late String login_id,depart_id;
 
@@ -27,6 +29,7 @@ class _ComplaintState extends State<Complaint> {
   var dropDownValue;
   /// Variables
   File? imageFile;
+  late String storedImage;
 
   final _formKey = GlobalKey<FormState>();
   Future<void> _showChoiceDialog(BuildContext context) {
@@ -66,38 +69,83 @@ class _ComplaintState extends State<Complaint> {
   Future getAllDepartments()async{
     var res = await Api().getData('/signup/view-all-dipartments');
     var body = json.decode(res.body);
-    print(body);
+
     setState(() {
      department=body['data'];
      depart_id = body['data'][0]['_id'];
-     print(depart_id);
+
     });
+  }
+  Future<void> getLogin() async {
+    prefs = await SharedPreferences.getInstance();
+    login_id = (prefs.getString('login_id') ?? '');
+    print('login_id_complaint ${login_id}');
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getAllDepartments();
+    getLogin();
   }
   void addComplaint()async {
     setState(() {
       _isLoading = true;
     });
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      login_id = (prefs.getString('login_id') ?? '');
-    //  login_id = login_id.replaceAll(new RegExp(r'[^\w\s]+'), '');
-      print(login_id);
-    });
+
     var data = {
-      "login_id":login_id ,
+      "login_id":login_id.replaceAll('"', '') ,
       "department_id":depart_id,
       "complaint_title": _compcontroller.text,
       "description": _descontroller.text,
-    //  "image": ,
+      "image":_filename,
       "location": _locontroller.text,
     };
+    print(data);
+    // if(data.image){
+    //   var res = await Api().authData(data.image, '/upload');
+    //
+    // }
     var res = await Api().authData(data, '/complaint/add-complaint');
+    var body = json.decode(res.body);
+
+    if(body['success']==true)
+    {
+      print(body);
+      addComplaintImage();
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+      Navigator.push(
+        this.context, //add this so it uses the context of the class
+        MaterialPageRoute(
+          builder: (context) => View_Comp(),
+        ), //MaterialpageRoute
+      );
+   //   Navigator.push(context as BuildContext, MaterialPageRoute(builder: (context)=>View_Comp()));
+
+    }
+    else
+    {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+    }
+  }
+  void addComplaintImage()async{
+    setState(() {
+      _isLoading = true;
+    });
+
+    var data = {
+      "login_id":login_id.replaceAll('"', ''),
+      "image":imageFile,
+
+    };
+    var res = await Api().authData(data, '/complaint/upload-image');
     var body = json.decode(res.body);
 
     if(body['success']==true)
@@ -108,7 +156,7 @@ class _ComplaintState extends State<Complaint> {
         backgroundColor: Colors.grey,
       );
 
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>View_Comp()));
+   //   Navigator.push(context as BuildContext, MaterialPageRoute(builder: (context)=>View_Comp()));
 
     }
     else
@@ -127,7 +175,8 @@ class _ComplaintState extends State<Complaint> {
             style: ElevatedButton.styleFrom
               (backgroundColor: Colors.lightBlueAccent),
             onPressed: () {
-              Navigator.of(context).push( MaterialPageRoute(builder: (context)=>View_Comp()));
+              addComplaint();
+             // Navigator.of(context).push( MaterialPageRoute(builder: (context)=>View_Comp()));
             },
             child: Padding(
               padding: const EdgeInsets.only(
@@ -310,9 +359,14 @@ class _ComplaintState extends State<Complaint> {
       maxHeight: 1800,
     );
     if (pickedFile != null) {
-      setState(() {
+      setState(()  {
+
         imageFile = File(pickedFile.path);
-        print('image ${imageFile}');
+         _filename = basename(imageFile!.path);
+        final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
+        final _extenion = extension(imageFile!.path);
+
+
       });
     }
   }
@@ -327,6 +381,10 @@ class _ComplaintState extends State<Complaint> {
     if (pickedFile != null) {
       setState(() {
         imageFile = File(pickedFile.path);
+        _filename = basename(imageFile!.path).toString();
+        final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
+        final _extenion = extension(imageFile!.path);
+
       });
     }
   }

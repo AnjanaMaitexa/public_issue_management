@@ -3,6 +3,8 @@ import 'package:public_issue_management/COMPANY/COMPLAINTS/manage_complaints.dar
 import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
 import 'package:public_issue_management/COMPANY/TENDER/tender_manage.dart';
 import 'package:public_issue_management/COMPANY/view_task.dart';
+import 'package:public_issue_management/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -12,6 +14,19 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late SharedPreferences localStorage;
+  late String login_id;
+  Future<void> getLogin() async {
+    localStorage = await SharedPreferences.getInstance();
+    login_id = (localStorage.getString('login_id') ?? '');
+    print('login_idcompany ${login_id}');
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLogin();
+  }
   Card makeDashboardItem(String title, IconData icon) {
     return Card(
          elevation: 1.0,
@@ -76,36 +91,47 @@ class _DashboardState extends State<Dashboard> {
           ));
         },
             icon: Icon(Icons.arrow_back)),
+       actions: [
+        IconButton(onPressed:(){
+          localStorage.setBool('login', true);
+          Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => LoginPage()));
+
+        },
+          icon: Icon(Icons.logout)),
+       ],
        /// elevation: .1,
         backgroundColor: Colors.lightBlueAccent,),
-       body: Column(
-         children: [ 
-          SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Text( "Company Dashboard",
-              style:TextStyle(
-                fontSize:20,
-                fontWeight:FontWeight.bold,
-                color:Colors.lightBlueAccent
-              ),),
-            ), SizedBox(
-              height: 40,
-            ),
-           GridView.count(
-            shrinkWrap: true,
-             crossAxisCount: 2,
-             padding: EdgeInsets.all(3.0),
-             children: <Widget>[
-               makeDashboardItem("TenderManage", Icons.document_scanner),
-               makeDashboardItem("ManageWorkers", Icons.groups),
-               makeDashboardItem("ManageComplaints", Icons.edit_calendar_rounded),
-               makeDashboardItem("ViewTask", Icons.task),
-             ],
-           ),
-         ],
+       body: SingleChildScrollView(
+         child: Column(
+           children: [ 
+            SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Text( "Company Dashboard",
+                style:TextStyle(
+                  fontSize:20,
+                  fontWeight:FontWeight.bold,
+                  color:Colors.lightBlueAccent
+                ),),
+              ), SizedBox(
+                height: 40,
+              ),
+             GridView.count(
+              shrinkWrap: true,
+               crossAxisCount: 2,
+               padding: EdgeInsets.all(3.0),
+               children: <Widget>[
+                 makeDashboardItem("TenderManage", Icons.document_scanner),
+                 makeDashboardItem("ManageWorkers", Icons.groups),
+                 makeDashboardItem("ViewComplaints", Icons.edit_calendar_rounded),
+                 makeDashboardItem("ViewTask", Icons.task),
+               ],
+             ),
+           ],
+         ),
        ),
     );
   }

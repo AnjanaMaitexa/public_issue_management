@@ -1,9 +1,12 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/USER/Model/complaint_model.dart';
 import 'package:public_issue_management/USER/add_complaint.dart';
 import 'package:public_issue_management/USER/complaint.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
+import 'package:public_issue_management/api.dart';
 
 class View_Comp extends StatelessWidget {
   const View_Comp({super.key});
@@ -25,7 +28,21 @@ class view_complaint extends StatefulWidget {
 }
 
 class _view_complaintState extends State<view_complaint> {
+  String complaint='';
+  String description='';
+  String statuss='';
 
+void viewComplaint()async{
+  var res = await Api().getData('/complaint/view-all-complaints');
+  var body = json.decode(res.body);
+  print(body);
+  setState(() {
+    complaint = body['data'];
+    description = body['data'][0]['_id'];
+    statuss = body['data'][0]['_id'];
+    //print(depart_id);
+  });
+}
 static List<String>complaints=['Water Supply issue','Draianage','Electric Line',];
 static List<String>desc=['Water is stopped','Drainage overflow','Broken',];
 static List<String>status=['Done','Progress','Done',];
