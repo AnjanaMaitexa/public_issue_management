@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/COMPANY/WORKERS/Comp_Model/model_worker.dart';
 import 'package:public_issue_management/COMPANY/Workers/add_worker.dart';
 import 'package:public_issue_management/COMPANY/Workers/update_worker.dart';
@@ -101,12 +102,11 @@ class _ManageWorkersState extends State<ManageWorkers> {
                   child: Card(
                     child: Container(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:CrossAxisAlignment.start,
                               children: [
 
                                 Text(_loadedWorkers[index]['name'],
@@ -117,14 +117,20 @@ class _ManageWorkersState extends State<ManageWorkers> {
                                     style: TextStyle(
                                       fontSize: 18,
                                     )),
+                                Text(_loadedWorkers[index]['phone'],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
                               ],
                             ),
                           ),
-                          Padding(
+                        /*  Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: ElevatedButton(
-                                onPressed: () {}, child: Text("Remove")),
-                          ),
+                                onPressed: () {
+                                  _delete();
+                                }, child: Text("Remove")),
+                          ),*/
 
                         /*  ElevatedButton(
                               onPressed: () {

@@ -11,13 +11,18 @@ class Api {
       body: data,
     );
   }
-
   getData(apiUrl) async {
     var fullUrl = _url + apiUrl;
     // await _getToken();
     return await http.get(
       Uri.parse(fullUrl),
       // headers: _setHeaders()
+    );
+  }
+  deleteData(apiUrl)async{
+    var fullUrl = _url + apiUrl;
+    return await http.get(
+        Uri.parse(fullUrl),
     );
   }
 }

@@ -20,31 +20,38 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController phnController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   late String loginid;
-  late String name;
-  late String address;
-  late String phn;
-  late String email;
-  late String username;
+  String name = "";
+  String address = "";
+  String phn = "";
+  String email = "";
+  String username = "";
   late SharedPreferences prefs;
   @override
-  Future<void> initState() async {
+  initState() {
     super.initState();
+    _viewPro();
+  }
+
+  Future<void> _viewPro() async {
     prefs = await SharedPreferences.getInstance();
     loginid = (prefs.getString('login_id') ?? '');
     print('login_idupdate ${loginid}');
-    _viewPro();
-  }
-  Future<void> _viewPro() async {
-  var res = await Api().getData('/signup/user-profile/' + loginid.replaceAll('"', ''));
-     var body = json.decode(res.body);
-     print(body);
-     setState(() {
-       name = body['data']['name'];
-       print(name);
-       address = body['data']['address'];
-       phn = body['data']['phone'];
-       email = body['data']['email'];
-     });
+    var res = await Api()
+        .getData('/signup/user-profile/' + loginid.replaceAll('"', ''));
+    var body = json.decode(res.body);
+    print(body);
+    setState(() {
+      name = body['data']['name'];
+      print(name);
+      address = body['data']['address'];
+      phn = body['data']['phone'];
+      email = body['data']['email'];
+
+      nameController.text = name;
+      addressController.text = address;
+      phnController.text = phn;
+      emailController.text = email;
+    });
   }
 
   _update() async {
@@ -54,10 +61,10 @@ class _EditProfileState extends State<EditProfile> {
 
     var data = {
       "name": nameController.text,
-       "address": addressController.text,
+      "address": addressController.text,
       "email": emailController.text,
       "phone": phnController.text,
-      "loginid": "641999eba522f06826048eea"
+      "loginid": loginid
     };
     print(data);
     var res = await Api().authData(data, '/signup/update-profile');
@@ -66,9 +73,6 @@ class _EditProfileState extends State<EditProfile> {
     if (body['success'] == true) {
       print(body);
 
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => User_board(),
-      ));
       Fluttertoast.showToast(
         msg: body['message'].toString(),
         backgroundColor: Colors.grey,
@@ -111,84 +115,89 @@ class _EditProfileState extends State<EditProfile> {
             centerTitle: true,
           ),
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: Column(
                   children: [
-                    TextInputField(
-                      controller: nameController,
-                      icon: Icons.person,
-                      hint: name,
-                      inputType: TextInputType.name,
-                      inputAction: TextInputAction.next,
-                    ),
-                    TextInputField(
-                      controller: emailController,
-                      icon: Icons.email,
-                      hint: email,
-                      inputType: TextInputType.emailAddress,
-                      inputAction: TextInputAction.next,
-                    ),
-                    /* TextInputField(
-                      controller: usernameController,
-                      icon: Icons.person_outlined,
-                      hint: 'User',
-                      inputType: TextInputType.emailAddress,
-                      inputAction: TextInputAction.next,
-                    ),
-*/
-                    TextInputField(
-                      controller: addressController,
-                      icon: Icons.location_history_outlined,
-                      hint: address,
-                      inputType: TextInputType.text,
-                      inputAction: TextInputAction.next,
-                    ),
-                    TextInputField(
-                      controller: phnController,
-                      icon: Icons.phone,
-                      hint: phn,
-                      inputType: TextInputType.number,
-                      inputAction: TextInputAction.next,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: Colors.lightBlueAccent),
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: TextButton(
-                          onPressed: () {
-                            _update();
-                          },
-                          child: Text(
-                            "SUBMIT",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                    Column(
+                      children: [
+                        buildTextField("Name", name, nameController),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        buildTextField("Email", email, emailController),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        buildTextField("Address", address, addressController),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        buildTextField("Phone", phn, phnController),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.lightBlueAccent),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+
+                                  _update();
+                                });
+                              },
+                              child: Text(
+                                "SUBMIT",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
           ),
         )
       ],
+    );
+  }
+
+  Widget buildTextField(
+      String labelText, String placeholder, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: TextField(
+        style: TextStyle(
+          color: Colors.white, // set the text color to blue
+        ),
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,labelStyle: TextStyle(color: Colors.white38),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          //  hintText: placeholder,
+          // hintText:address ,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide(color: Colors.white)),
+        ),
+      ),
     );
   }
 }
