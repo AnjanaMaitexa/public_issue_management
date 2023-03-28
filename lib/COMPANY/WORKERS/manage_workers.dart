@@ -101,45 +101,28 @@ class _ManageWorkersState extends State<ManageWorkers> {
                   },
                   child: Card(
                     child: Container(
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              crossAxisAlignment:CrossAxisAlignment.start,
-                              children: [
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
 
-                                Text(_loadedWorkers[index]['name'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    )),
-                                Text(_loadedWorkers[index]['address'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    )),
-                                Text(_loadedWorkers[index]['phone'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    )),
-                              ],
-                            ),
+                              Text(_loadedWorkers[index]['name'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  )),
+                              Text(_loadedWorkers[index]['address'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  )),
+                              Text(_loadedWorkers[index]['phone'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  )),
+                            ],
                           ),
-                        /*  Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  _delete();
-                                }, child: Text("Remove")),
-                          ),*/
-
-                        /*  ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UpdateWorker(),
-                                ));
-                              },
-                              child: Text("Update"))*/
-                        ],
+                        ),
                       ),
                     ),
                   ),

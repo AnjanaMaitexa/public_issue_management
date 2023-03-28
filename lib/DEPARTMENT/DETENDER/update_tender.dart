@@ -1,6 +1,10 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/DEPARTMENT/DETENDER/tender_manage.dart';
+import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateTender extends StatefulWidget {
@@ -13,8 +17,9 @@ class UpdateTender extends StatefulWidget {
 class _UpdateTenderState extends State<UpdateTender> {
   bool _isLoading = false;
   String name="";
-  String address="";
-  String phn="";
+  String description="";
+  String sstartDate="";
+  String eendDate="";
   late SharedPreferences localStorage;
   late String tender_id;
 
@@ -37,11 +42,15 @@ class _UpdateTenderState extends State<UpdateTender> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        String formattedDate=picked.toIso8601String();
+        startController.text=formattedDate.substring(0, 10);
+
+        startDate='${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
       });
     }
   }
@@ -54,14 +63,82 @@ class _UpdateTenderState extends State<UpdateTender> {
     if (picked != null && picked != selectedEndDate) {
       setState(() {
         selectedEndDate = picked;
+        String endformatted=picked.toIso8601String();
+        endController.text=endformatted.substring(0, 10);
 
         endDate='${selectedEndDate.day}/${selectedEndDate.month}/${selectedEndDate.year}';
       });
     }
   }
+
+  @override
+  initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _viewTender();
+  }
+
+  Future<void> _viewTender() async {
+    localStorage = await SharedPreferences.getInstance();
+    tender_id = (localStorage.getString('_id') ?? '');
+    print('tend ${tender_id}');
+    var res = await Api().getData('/tender/view-single-tender/' + tender_id);
+    var body = json.decode(res.body);
+    print(body);
+    setState(() {
+      name = body['data']['tender_name'];
+      description = body['data']['description'];
+      sstartDate = body['data']['job_start_date'];
+      eendDate = body['data']['job_end_date'];
+      nameTController.text=name;
+      desController.text=description;
+      startController.text=sstartDate;
+      endController.text=eendDate;
+
+
+    });
+  }
+
+  _update() async {
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {
+      "tender_name": nameTController.text,
+      "job_start_date":startController.text,
+      "job_end_date": endController.text,
+      "description": desController.text
+
+    };
+    print(data);
+    var res =
+    await Api().authData(data, '/tender/update-single-tender/' + tender_id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => TenderManage()));
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text("Update Tenders"),
@@ -91,6 +168,22 @@ class _UpdateTenderState extends State<UpdateTender> {
                 const SizedBox(
                   height: 40,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextField(
+                    controller: nameTController,
+                    maxLines: 2,
+                    decoration: InputDecoration(
+                      hintText:"TenderName" ,
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
 
                   children: [
@@ -106,11 +199,12 @@ class _UpdateTenderState extends State<UpdateTender> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(top:8.0),
-                          child: Text("${selectedDate.toLocal()}".split(' ')[0],
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black38
-                            ),),
+                          child: TextField(
+                            controller:startController,
+                              decoration: InputDecoration(
+                                hintText:"StartDate" ,
+                                  )
+                            ,),
                         ),
                       ),
                     ),
@@ -136,11 +230,12 @@ class _UpdateTenderState extends State<UpdateTender> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(top:8.0),
-                          child: Text("${selectedEndDate.toLocal()}".split(' ')[0],
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black38
-                            ),),
+                          child:  TextField(
+                            controller:endController,
+                            decoration: InputDecoration(
+                              hintText:"EndDate" ,
+                                 )
+                            ,),
                         ),
                       ),
                     ),
@@ -155,42 +250,18 @@ class _UpdateTenderState extends State<UpdateTender> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextField(
+                    controller: desController,
                     decoration: InputDecoration(
                       hintText:"Description" ,
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+
                     ),
 
                   ),
                 ),
                 SizedBox(
                   height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextField(
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      hintText:"Status" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText:"Phone" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-
-                  ),
                 ),
 
 
@@ -207,9 +278,12 @@ class _UpdateTenderState extends State<UpdateTender> {
                     width: MediaQuery.of(context).size.width,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        setState(() {
+                          _update();
+                        });
+                      /*  Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => TenderManage(),));
-                      },
+                   */   },
                       child: Text(
                         "UPDATE",
                         style: TextStyle(

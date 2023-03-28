@@ -105,7 +105,6 @@ class _TenderManageState extends State<TenderManage> {
                         child: Card(
                           child: Container(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(15.0),
