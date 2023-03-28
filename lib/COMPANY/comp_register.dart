@@ -104,6 +104,7 @@ class _Comp_RegState extends State<Comp_Reg> {
             Form(
 
               key: _formKey,
+              autovalidateMode: AutovalidateMode.always,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

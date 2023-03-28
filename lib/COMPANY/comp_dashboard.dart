@@ -48,10 +48,11 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ManageComplaint(),
                 ));
-              }else if(title=='ViewTask'){
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Viewtask(),
-                ));
+              }else if(title=='Logout'){
+                localStorage.setBool('login', true);
+                Navigator.pushReplacement(context,
+                    new MaterialPageRoute(builder: (context) => LoginPage()));
+
               }else{
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TenderManage(),));
@@ -127,7 +128,7 @@ class _DashboardState extends State<Dashboard> {
                  makeDashboardItem("TenderManage", Icons.document_scanner),
                  makeDashboardItem("ManageWorkers", Icons.groups),
                  makeDashboardItem("ViewComplaints", Icons.edit_calendar_rounded),
-                 makeDashboardItem("ViewTask", Icons.task),
+                 makeDashboardItem("Logout", Icons.logout),
                ],
              ),
            ],

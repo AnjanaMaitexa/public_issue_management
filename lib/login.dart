@@ -53,8 +53,10 @@ class _LoginPageState extends State<LoginPage> {
       localStorage = await SharedPreferences.getInstance();
       localStorage.setString('role', role.toString());
       localStorage.setString('login_id', json.encode(body['login_id']));
+      localStorage.setString('department_id', json.encode(body['department_id']));
 
       print('login_idss ${json.encode(body['login_id'])}');
+      print('login_simple ${json.encode(body['department_id'])}');
 
       /*loginid = (localStorage.getString('login_id') ?? '');
       print(loginid);*/
@@ -126,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.lightBlueAccent,
           body: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

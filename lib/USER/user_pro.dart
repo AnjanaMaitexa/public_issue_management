@@ -26,6 +26,8 @@ class _EditProfileState extends State<EditProfile> {
   String email = "";
   String username = "";
   late SharedPreferences prefs;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   initState() {
     super.initState();
@@ -118,60 +120,64 @@ class _EditProfileState extends State<EditProfile> {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 100.0),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        buildTextField("Name", name, nameController),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        buildTextField("Email", email, emailController),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        buildTextField("Address", address, addressController),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        buildTextField("Phone", phn, phnController),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.lightBlueAccent),
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            child: TextButton(
-                              onPressed: () {
-                                setState(() {
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: Column(
+                    children: [
+                      Column(
+                        children: [
+                          buildTextField("Name", name, nameController),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          buildTextField("Email", email, emailController),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          buildTextField("Address", address, addressController),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          buildTextField("Phone", phn, phnController),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.lightBlueAccent),
+                              height: 50,
+                              width: MediaQuery.of(context).size.width,
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
 
-                                  _update();
-                                });
-                              },
-                              child: Text(
-                                "SUBMIT",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                    _update();
+                                  });
+                                },
+                                child: Text(
+                                  "SUBMIT",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    )
-                  ],
+                          SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -185,7 +191,7 @@ class _EditProfileState extends State<EditProfile> {
       String labelText, String placeholder, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: TextField(
+      child: TextFormField(
         style: TextStyle(
           color: Colors.white, // set the text color to blue
         ),

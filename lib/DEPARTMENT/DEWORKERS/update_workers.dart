@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
-import 'package:public_issue_management/USER/user_dashboard.dart';
+import 'package:public_issue_management/DEPARTMENT/DEWORKERS/manage_workers.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,9 +15,9 @@ class UpdateWorker extends StatefulWidget {
 
 class _UpdateWorkerState extends State<UpdateWorker> {
   bool _isLoading = false;
-   String name="";
-   String address="";
-   String phn="";
+  String name="";
+  String address="";
+  String phn="";
   late SharedPreferences localStorage;
   late String worker_id;
   TextEditingController nameController = TextEditingController();
@@ -70,7 +69,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
     };
     print(data);
     var res =
-        await Api().authData(data, '/worker/update-single-worker/' + worker_id);
+    await Api().authData(data, '/worker/update-single-worker/' + worker_id);
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
@@ -99,7 +98,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
     var data = {"_id": worker_id};
     print(data);
     var res =
-        await Api().deleteData( '/worker/delete-single-worker/' + worker_id);
+    await Api().deleteData( '/worker/delete-single-worker/' + worker_id);
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
@@ -242,7 +241,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
         decoration: InputDecoration(
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
-        //  hintText: placeholder,
+          //  hintText: placeholder,
           // hintText:address ,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
         ),

@@ -94,7 +94,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
     }
   }
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     children: [
                       Form(
                         key: _formKey,
+                        autovalidateMode: AutovalidateMode.always,
                         child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
