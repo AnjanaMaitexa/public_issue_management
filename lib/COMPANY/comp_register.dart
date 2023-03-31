@@ -251,7 +251,7 @@ class _Comp_RegState extends State<Comp_Reg> {
                         } else {
                           return null;
                         }
-                      },
+                      },obscureText: true,
                       decoration: InputDecoration(
                         hintText:"Password" ,
                         border:
@@ -266,6 +266,7 @@ class _Comp_RegState extends State<Comp_Reg> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: TextFormField(
+                      obscureText: true,
                       controller: confirmController,
                       validator: (valueConPass) {
                         if (valueConPass!.isEmpty) {

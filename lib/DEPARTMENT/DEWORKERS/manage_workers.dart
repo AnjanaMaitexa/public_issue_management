@@ -16,8 +16,9 @@ class ManageWorkers extends StatefulWidget {
 
 class _ManageWorkersState extends State<ManageWorkers> {
   late SharedPreferences localStorage;
-  late String login_id;
+
   late String worker_id;
+  late String department_id;
   late String name;
   late String address;
   late String phn;
@@ -34,16 +35,20 @@ class _ManageWorkersState extends State<ManageWorkers> {
 
   _fetchData() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_workerdash ${login_id}');
+    department_id = (localStorage.getString('department_id') ?? '');
+    print('dept_id ${department_id}');
     var res = await Api()
-        .getData('/worker/view-all-workers/' + login_id.replaceAll('"', ''));
+        .getData('/worker/department-view-all-workers/' + department_id.replaceAll('"', ''));
     if (res.statusCode == 200) {
-      var items = json.decode(res.body)['data'];
-      print(items);
-      setState(() {
-        _loadedWorkers = items;
-
+      var body = json.decode(res.body)['data'];
+      print(body);
+      setState(()  {
+        _loadedWorkers = body;
+        /*  worker_id=int.parse(body['data']['_id']).toString();
+        print("worker_id${worker_id}");
+       localStorage = await SharedPreferences.getInstance();
+        localStorage.setString('_id', worker_id.toString());
+*/
       });
     } else {
       setState(() {
@@ -51,7 +56,6 @@ class _ManageWorkersState extends State<ManageWorkers> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -86,28 +90,29 @@ class _ManageWorkersState extends State<ManageWorkers> {
               shrinkWrap: true,
               itemCount: _loadedWorkers.length, //snapshot.data!.length,
               itemBuilder: (context, index) {
-
+                worker_id=_loadedWorkers[index]['_id'];
                 return GestureDetector(
-                  onTap:() async {
-                    worker_id=_loadedWorkers[index]['_id'];
-                    localStorage = await SharedPreferences.getInstance();
-                    localStorage.setString('_id', worker_id.toString());
-                    //   print("worker ${_loadedWorkers[index]['_id']}");
+                  onTap: () async {
 
+                    worker_id=_loadedWorkers[index]['_id'];
+                    print("woree ${worker_id}");
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UpdateWorker(),
-                    ));
+                        builder: (context) => UpdateWorker(worker_id,)));
                   },
                   child: Card(
                     child: Container(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
                               crossAxisAlignment:CrossAxisAlignment.start,
                               children: [
-
+                                Text(_loadedWorkers[index]['_id'],
+                                    style: TextStyle(
+                                      fontSize: 1,color: Colors.white,
+                                    )),
                                 Text(_loadedWorkers[index]['name'],
                                     style: TextStyle(
                                       fontSize: 18,
@@ -123,21 +128,7 @@ class _ManageWorkersState extends State<ManageWorkers> {
                               ],
                             ),
                           ),
-                          /*  Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  _delete();
-                                }, child: Text("Remove")),
-                          ),*/
 
-                          /*  ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UpdateWorker(),
-                                ));
-                              },
-                              child: Text("Update"))*/
                         ],
                       ),
                     ),
@@ -155,7 +146,7 @@ class _ManageWorkersState extends State<ManageWorkers> {
               builder: (context) => Addworker(),
             ));
           },
-          tooltip: 'Increment',
+          tooltip: 'Add Worker',
           child: const Icon(Icons.add),
         ),
       ),

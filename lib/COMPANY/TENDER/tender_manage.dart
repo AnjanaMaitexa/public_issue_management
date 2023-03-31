@@ -1,9 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:public_issue_management/COMPANY/TENDER/add_tender.dart';
-import 'package:public_issue_management/COMPANY/TENDER/tender_model.dart';
-import 'package:public_issue_management/COMPANY/TENDER/update_tender.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
+import 'package:public_issue_management/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TenderManage extends StatefulWidget {
   const TenderManage({Key? key}) : super(key: key);
@@ -13,14 +15,122 @@ class TenderManage extends StatefulWidget {
 }
 
 class _TenderManageState extends State<TenderManage> {
-  static List<String>start=['1-2-2022','1-2-2022','1-2-2022'];
-  static List<String>end=['2-2-2023','2-2-2023','2-2-2023',];
-  static List<String>desc=['desc1','dec2','desc3',];
-  static List<String>status=['desc1','dec2','desc3',];
 
-  final List<TenderModel>model=List.generate(start.length, (index)
-  => TenderModel(start[index],end[index],desc[index],status[index]));
+  late SharedPreferences prefs;
+  late String company_id;
+  late String depart_id;
+  late String tender_id;
+  String name="";
+  String start="";
+  String end="";
+  String desc="";
+  List _loadedTender = [];
+  bool isLoading = false;
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchData();
+  }
+
+  _fetchData() async {
+    prefs = await SharedPreferences.getInstance();
+    
+    company_id = (prefs.getString('company_id') ?? '');
+    print('login_company ${company_id}');
+
+    var res = await Api()
+        .getData('/tender/company-view-tender/' +company_id.replaceAll('"', '') );
+    //  print(res);
+    if (res.statusCode == 200) {
+      var items = json.decode(res.body)['data'];
+      //   print(items);
+      setState(() {
+        _loadedTender = items;
+        print(_loadedTender);
+
+      });
+    } else {
+      setState(() {
+        _loadedTender = [];
+        Fluttertoast.showToast(
+          msg:"Currently there is no tenders available",
+          backgroundColor: Colors.grey,
+        );
+      });
+    }
+  }
+
+  _acceptTender() async{
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {
+    /*  "tender_name": nameTController.text,
+      "job_start_date":startController.text,
+      "job_end_date": endController.text,
+      "description": desController.text
+*/
+    };
+    print(data);
+    var res =
+    await Api().authData(data, '/tender/accept-tender/' + tender_id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+  /*    Navigator.push(
+          context, MaterialPageRoute(builder: (context) => TenderManage()));
+ */   } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
+  _rejectTender() async{
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {
+      /*  "tender_name": nameTController.text,
+      "job_start_date":startController.text,
+      "job_end_date": endController.text,
+      "description": desController.text
+*/
+    };
+    print(data);
+    var res =
+    await Api().authData(data, '/tender/reject-tender/' + tender_id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+      /*    Navigator.push(
+          context, MaterialPageRoute(builder: (context) => TenderManage()));
+ */   } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
+ @override
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -51,7 +161,7 @@ class _TenderManageState extends State<TenderManage> {
                 SizedBox(height:20),
                 ListView.builder(
                   shrinkWrap:true,
-                  itemCount: status.length,
+                  itemCount: _loadedTender.length,
                   itemBuilder: (context,index){
                     return Card(
                       child: Container(
@@ -63,27 +173,37 @@ class _TenderManageState extends State<TenderManage> {
                               child: Column(
                                 crossAxisAlignment:CrossAxisAlignment.start,
                                 children: [
-                                  Text("StartDate:" +model[index].start,
+                                  Text(_loadedTender[index]['tender_name'],
                                     style:TextStyle(
                                       fontSize: 18,
                                     ) ,),
-                                  Text("EndDate:"+model[index].end,
+                                  Text("StartDate:"+ _loadedTender[index]['job_start_date'],
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    ) ,),
+                                  Text("EndDate:"+_loadedTender[index]['job_end_date'],
                                       style:TextStyle(
                                         fontSize: 18,
                                       )),
-                                  Text("Status:"+model[index].status,
+                                  Text("Description:"+_loadedTender[index]['description'],
                                       style:TextStyle(
                                         fontSize: 18,
                                       )),
                                 ],
                               ),
                             ),
-                            ElevatedButton(onPressed: (){},
+                            ElevatedButton(onPressed: (){
+                              setState(() {
+
+                                _acceptTender();
+                              });
+                            },
                                 child: Text("Approve")),
                             ElevatedButton(onPressed: (){
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => UpdateTender(),
-                              ));
+                             setState(() {
+                               _rejectTender();
+                             });
+
                             },
                                 child: Text("Reject"))
                           ],

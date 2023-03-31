@@ -21,10 +21,12 @@ class _AddworkerState extends State<Addworker> {
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController phnController = TextEditingController();
+  TextEditingController userControllerr = TextEditingController();
+  TextEditingController pwdController = TextEditingController();
   Future<void> getLogin() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_idcompany ${login_id}');
+    login_id = (localStorage.getString('department_id') ?? '');
+    print('dept ${login_id}');
   }
   @override
   void initState() {
@@ -38,6 +40,8 @@ class _AddworkerState extends State<Addworker> {
     nameController.dispose();
     addressController.dispose();
     phnController.dispose();
+    pwdController.dispose();
+    userControllerr.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -49,18 +53,21 @@ class _AddworkerState extends State<Addworker> {
     });
 
     var data = {
-      "company_id":login_id.replaceAll('"', ''),
+      "department_id":login_id.replaceAll('"', ''),
       "name": nameController.text,
       "address": addressController.text,
       "phone": phnController.text,
+      "username": userControllerr.text,
+      "password": pwdController.text,
     };
     print(data);
-    var res = await Api().authData(data,'/worker');
+    var res = await Api().authData(data,'/worker/department-worker');
     var body = json.decode(res.body);
 
-    print(body);
+
     if(body['success']==true)
     {
+      print('added worker${body}');
       Fluttertoast.showToast(
         msg: body['message'].toString(),
         backgroundColor: Colors.grey,
@@ -96,6 +103,7 @@ class _AddworkerState extends State<Addworker> {
         body:Container(
           child:Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -155,7 +163,8 @@ class _AddworkerState extends State<Addworker> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField( validator: (value) {
+                  child: TextFormField(
+                      validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter Mobile Number';
                     }
@@ -177,6 +186,49 @@ class _AddworkerState extends State<Addworker> {
                   ),
                 ),
                 SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter username';
+                      }
+
+                    },
+                    controller: userControllerr,
+                    decoration: InputDecoration(
+                      hintText:"Username" ,
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextFormField(
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter Password';
+                      }
+
+                    },
+                    controller: pwdController,
+                    decoration: InputDecoration(
+                      hintText:"Password" ,
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+
+                  ),
+                ),
+                SizedBox(
                   height: 30,
                 ),
                 Padding(
@@ -190,9 +242,7 @@ class _AddworkerState extends State<Addworker> {
                     child: TextButton(
                       onPressed: () {
                         registerWorker();
-                        /* Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ManageWorkers(),));*/
-                      },
+                          },
                       child: Text(
                         "SUBMIT",
                         style: TextStyle(

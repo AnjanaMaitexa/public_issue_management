@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/COMPANY/COMPLAINTS/manage_complaints.dart';
+import 'package:public_issue_management/COMPANY/WORKER_TASK/woker_task.dart';
 import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
 import 'package:public_issue_management/COMPANY/TENDER/tender_manage.dart';
 import 'package:public_issue_management/COMPANY/view_task.dart';
@@ -16,10 +17,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   late SharedPreferences localStorage;
   late String login_id;
+  late String company_id;
   Future<void> getLogin() async {
     localStorage = await SharedPreferences.getInstance();
     login_id = (localStorage.getString('login_id') ?? '');
-    print('login_idcompany ${login_id}');
+    company_id = (localStorage.getString('company_id') ?? '');
+    print('companys_id ${company_id}');
+    print('companys_loginid ${login_id}');
   }
   @override
   void initState() {
@@ -44,15 +48,14 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ManageWorkers(),
                 ));
-              }else if(title=='ManageComplaints'){
+              }else if(title=='Complaints'){
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ManageComplaint(),
                 ));
-              }else if(title=='Logout'){
-                localStorage.setBool('login', true);
-                Navigator.pushReplacement(context,
-                    new MaterialPageRoute(builder: (context) => LoginPage()));
-
+              } else if(title=='AssignTask') {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => WorkerTask(),
+                ));
               }else{
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TenderManage(),));
@@ -127,8 +130,9 @@ class _DashboardState extends State<Dashboard> {
                children: <Widget>[
                  makeDashboardItem("TenderManage", Icons.document_scanner),
                  makeDashboardItem("ManageWorkers", Icons.groups),
-                 makeDashboardItem("ViewComplaints", Icons.edit_calendar_rounded),
-                 makeDashboardItem("Logout", Icons.logout),
+                 makeDashboardItem("Complaints", Icons.edit_calendar_rounded),
+                 makeDashboardItem("AssignTask", Icons.add_task),
+               //  makeDashboardItem("Logout", Icons.logout),
                ],
              ),
            ],

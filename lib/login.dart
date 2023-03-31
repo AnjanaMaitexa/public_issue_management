@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
 import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
+import 'package:public_issue_management/WORKERS/workers_dashboard.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:public_issue_management/dashboard.dart';
 import 'package:public_issue_management/forgot_pwd.dart';
@@ -22,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   String user = "2";
   String company = "1";
   String depart = "3";
+  String worker = "4";
   String storedvalue = "1";
   late SharedPreferences localStorage;
   String loginId = '';
@@ -54,9 +56,12 @@ class _LoginPageState extends State<LoginPage> {
       localStorage.setString('role', role.toString());
       localStorage.setString('login_id', json.encode(body['login_id']));
       localStorage.setString('department_id', json.encode(body['department_id']));
+      localStorage.setString('company_id', json.encode(body['company_id']));
+    //  localStorage.setString('department_id', json.encode(body['department_id']));
 
       print('login_idss ${json.encode(body['login_id'])}');
-      print('login_simple ${json.encode(body['department_id'])}');
+      print('login_depart ${json.encode(body['department_id'])}');
+      print('login_company ${json.encode(body['company_id'])}');
 
       /*loginid = (localStorage.getString('login_id') ?? '');
       print(loginid);*/
@@ -83,6 +88,10 @@ class _LoginPageState extends State<LoginPage> {
           storedvalue == status.replaceAll('"', '')) {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Depart_Board(),
+        ));
+      } else if (worker == role.replaceAll('"', '')) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => WorkersDashboard(),
         ));
       } else {
         Fluttertoast.showToast(

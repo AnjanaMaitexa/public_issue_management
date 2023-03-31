@@ -29,6 +29,7 @@ class _AddTenderState extends State<AddTender> {
   late String startDate;
   late String endDate;
 
+  final _formKey = GlobalKey<FormState>();
   List company = [];
   String? selectcom;
   var dropDownValue;
@@ -139,167 +140,171 @@ class _AddTenderState extends State<AddTender> {
               icon: Icon(Icons.arrow_back)),
         ),
         body:Container(
-          child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          child:Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: Text( "Add Tenders",
-                  style:TextStyle(
-                      fontSize:20,
-                      fontWeight:FontWeight.bold,
-                      color:Colors.lightBlueAccent
-                  ),),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextFormField(
-                  controller: nameTController,
-                  decoration: InputDecoration(
-                    hintText:"TenderName" ,
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Text( "Add Tenders",
+                    style:TextStyle(
+                        fontSize:20,
+                        fontWeight:FontWeight.bold,
+                        color:Colors.lightBlueAccent
+                    ),),
                 ),
-              ),
-              Row(
-
-                 children: [
-
-                   Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                     child: Container(
-                       height: 45,
-                         width:150 ,
-                         margin: const EdgeInsets.all(15.0),
-                         padding: const EdgeInsets.all(3.0),
-                         decoration: BoxDecoration(
-                             border: Border.all(color: Colors.black26)
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.only(top:8.0),
-                           child: Text('${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
-                           style: TextStyle(
-                             fontSize: 16,
-                             color: Colors.black38
-                           ),),
-                         ),
-                     ),
-                   ),
-                   const SizedBox(height: 20.0,),
-                   ElevatedButton(
-                     onPressed: () => _selectDate(context),
-                     child: const Text('Start date'),
-                   ),
-                 ],
-               ),
-              Row(
-
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Container(
-                      height: 45,
-                      width:150 ,
-                      margin: const EdgeInsets.all(15.0),
-                      padding: const EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black26)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top:8.0),
-                        child: Text('${selectedEndDate.year}-${selectedEndDate.month}-${selectedEndDate.day}',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black38
-                          ),),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0,),
-                  ElevatedButton(
-                    onPressed: () => _selectEndDate(context),
-                    child: const Text('End date'),
-                  ),
-                ],
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextFormField(
-                  controller: desController,
-                  decoration: InputDecoration(
-                    hintText:"Description" ,
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-
+                const SizedBox(
+                  height: 40,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: DropdownButtonFormField<String>(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextFormField(
+                    controller: nameTController,
                     decoration: InputDecoration(
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30)) ,
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30)),
+                      hintText:"TenderName" ,
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                     ),
-                    hint: Text('Company'),
-                    value: dropDownValue,
-                    items: company
-                        .map((type) => DropdownMenuItem<String>(
-                      value: type['_id'].toString(),
-                      child: Text(
-                        type['company_name'].toString(),
-                        style: TextStyle(color: Colors.black),
+
+                  ),
+                ),
+                Row(
+
+                   children: [
+
+                     Padding(
+                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                       child: Container(
+                         height: 45,
+                           width:150 ,
+                           margin: const EdgeInsets.all(15.0),
+                           padding: const EdgeInsets.all(3.0),
+                           decoration: BoxDecoration(
+                               border: Border.all(color: Colors.black26)
+                           ),
+                           child: Padding(
+                             padding: const EdgeInsets.only(top:8.0),
+                             child: Text('${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
+                             style: TextStyle(
+                               fontSize: 16,
+                               color: Colors.black38
+                             ),),
+                           ),
+                       ),
+                     ),
+                     const SizedBox(height: 20.0,),
+                     ElevatedButton(
+                       onPressed: () => _selectDate(context),
+                       child: const Text('Start date'),
+                     ),
+                   ],
+                 ),
+                Row(
+
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Container(
+                        height: 45,
+                        width:150 ,
+                        margin: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black26)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top:8.0),
+                          child: Text('${selectedEndDate.year}-${selectedEndDate.month}-${selectedEndDate.day}',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black38
+                            ),),
+                        ),
                       ),
-                    ))
-                        .toList(),
-                    onChanged: (type) {
+                    ),
+                    const SizedBox(height: 20.0,),
+                    ElevatedButton(
+                      onPressed: () => _selectEndDate(context),
+                      child: const Text('End date'),
+                    ),
+                  ],
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextFormField(
+                    controller: desController,
+                    decoration: InputDecoration(
+                      hintText:"Description" ,
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30)) ,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      hint: Text('Company'),
+                      value: dropDownValue,
+                      items: company
+                          .map((type) => DropdownMenuItem<String>(
+                        value: type['_id'].toString(),
+                        child: Text(
+                          type['company_name'].toString(),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ))
+                          .toList(),
+                      onChanged: (type) {
+                        setState(() {
+                          dropDownValue = type;
+                        });
+                      }),
+                ),
+
+
+
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.lightBlueAccent),
+                    height:50,
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                      onPressed: () {
                       setState(() {
-                        dropDownValue = type;
-                      });
-                    }),
-              ),
-
-
-
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.lightBlueAccent),
-                  height:50,
-                  width: MediaQuery.of(context).size.width,
-                  child: TextButton(
-                    onPressed: () {
-                    setState(() {
-                      addTender();
-                    });   },
-                    child: Text(
-                      "SUBMIT",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        addTender();
+                      });   },
+                      child: Text(
+                        "SUBMIT",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

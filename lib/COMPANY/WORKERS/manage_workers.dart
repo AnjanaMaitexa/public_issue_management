@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:public_issue_management/COMPANY/WORKERS/Comp_Model/model_worker.dart';
 import 'package:public_issue_management/COMPANY/Workers/add_worker.dart';
 import 'package:public_issue_management/COMPANY/Workers/update_worker.dart';
 import 'package:public_issue_management/COMPANY/comp_dashboard.dart';
@@ -17,7 +16,7 @@ class ManageWorkers extends StatefulWidget {
 
 class _ManageWorkersState extends State<ManageWorkers> {
   late SharedPreferences localStorage;
-  late String login_id;
+  late String company_id;
   late String worker_id;
   late String name;
   late String address;
@@ -35,10 +34,10 @@ class _ManageWorkersState extends State<ManageWorkers> {
 
   _fetchData() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_workerdash ${login_id}');
+    company_id = (localStorage.getString('company_id') ?? '');
+    print('login_workerdash ${company_id}');
     var res = await Api()
-        .getData('/worker/view-all-workers/' + login_id.replaceAll('"', ''));
+        .getData('/worker/view-all-workers/' + company_id.replaceAll('"', ''));
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
       print(items);
@@ -49,6 +48,10 @@ class _ManageWorkersState extends State<ManageWorkers> {
     } else {
       setState(() {
         _loadedWorkers = [];
+        Fluttertoast.showToast(
+          msg:"Currently there is no Workers available",
+          backgroundColor: Colors.grey,
+        );
       });
     }
   }
@@ -106,6 +109,7 @@ class _ManageWorkersState extends State<ManageWorkers> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Column(
+                            crossAxisAlignment:CrossAxisAlignment.start ,
                             children: [
 
                               Text(_loadedWorkers[index]['name'],
@@ -139,7 +143,7 @@ class _ManageWorkersState extends State<ManageWorkers> {
               builder: (context) => Addworker(),
             ));
           },
-          tooltip: 'Increment',
+          tooltip: 'Add Workers',
           child: const Icon(Icons.add),
         ),
       ),

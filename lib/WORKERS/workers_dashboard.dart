@@ -1,48 +1,32 @@
 
 import 'package:flutter/material.dart';
-import 'package:public_issue_management/DEPARTMENT/DCOMPLAINTS/depart_complaint.dart';
-import 'package:public_issue_management/DEPARTMENT/DEWORKERS/manage_workers.dart';
-import 'package:public_issue_management/DEPARTMENT/TASK/depart_task.dart';
-import 'package:public_issue_management/DEPARTMENT/DETENDER/tender_manage.dart';
+import 'package:public_issue_management/WORKERS/viewwork.dart';
 import 'package:public_issue_management/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Depart_Board extends StatelessWidget {
-  const Depart_Board({super.key});
+class WorkersDashboard extends StatefulWidget {
+  const WorkersDashboard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-   
-    return MaterialApp(
-      title: 'Department Dashboard',
-      debugShowCheckedModeBanner: false,
-      home:MyStatefulWidget()
-    );
-  }
-}
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({super.key});
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<WorkersDashboard> createState() => _WorkersDashboardState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _WorkersDashboardState extends State<WorkersDashboard> {
   late SharedPreferences localStorage;
-late String login_id,depart_id;
-Future<void> getLogin() async {
-  localStorage = await SharedPreferences.getInstance();
-  login_id = (localStorage.getString('login_id') ?? '');
-  depart_id = (localStorage.getString('department_id') ?? '');
-  print('login_depart ${login_id}');
-  print('login_newdepart ${depart_id}');
-}
-@override
-void initState() {
-  // TODO: implement initState
-  super.initState();
-  getLogin();
-}
+  late String login_id,depart_id;
+  Future<void> getLogin() async {
+    localStorage = await SharedPreferences.getInstance();
+    login_id = (localStorage.getString('login_id') ?? '');
+    depart_id = (localStorage.getString('department_id') ?? '');
+    print('login_depart ${login_id}');
+    print('login_newdepart ${depart_id}');
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLogin();
+  }
   Card makeDashboardItem(String title, IconData icon) {
     return Card(
         elevation: 1.0,
@@ -51,26 +35,19 @@ void initState() {
           decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
           child:  InkWell(
             onTap: () {
-              if(title=='Complaints'){
+              if(title=='ViewTask'){
+                localStorage.setBool('login', true);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ViewComplaints(),
+                  builder: (context) => ViewWorkTask(),
                 ));
-              }else if(title=='Tenders'){
+              }else if(title=='Logout'){
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TenderManage(),
-                ));
-              }else if(title=='ManageWorkers'){
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ManageWorkers(),
-                ));
-              } else if(title=='AssignTask'){
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Depart_Task(),
+                  builder: (context) => LoginPage(),
                 ));
 
               }else{
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Depart_Board(),));
+                  builder: (context) => WorkersDashboard(),));
               }
             },
             child: Column(
@@ -100,12 +77,12 @@ void initState() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Department Management"),
+        title: Text("Workers Dashboard"),
         /// elevation: .1,
         backgroundColor: Colors.lightBlueAccent,
         actions: [
           IconButton(onPressed:(){
-            localStorage.setBool('isLoggedIn', false);
+            localStorage.setBool('login', true);
             Navigator.pushReplacement(context,
                 new MaterialPageRoute(builder: (context) => LoginPage()));
 
@@ -123,7 +100,7 @@ void initState() {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Text( "Deparatment Dashboard",
+                child: Text( "Workers Dashboard",
                   style:TextStyle(
                       fontSize:20,
                       fontWeight:FontWeight.bold,
@@ -137,10 +114,8 @@ void initState() {
                 crossAxisCount: 2,
                 padding: EdgeInsets.all(3.0),
                 children: <Widget>[
-                  makeDashboardItem("Complaints", Icons.document_scanner_sharp),
-                  makeDashboardItem("Tenders", Icons.document_scanner),
-                  makeDashboardItem("ManageWorkers", Icons.task),
-                  makeDashboardItem("AssignTask", Icons.task),
+                  makeDashboardItem("ViewTask", Icons.task_rounded),
+                  makeDashboardItem("Logout", Icons.logout),
                 ],
               ),
             ],

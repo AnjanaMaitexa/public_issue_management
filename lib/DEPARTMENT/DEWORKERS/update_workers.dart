@@ -7,7 +7,10 @@ import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateWorker extends StatefulWidget {
-  const UpdateWorker({Key? key}) : super(key: key);
+  String worker_id;
+
+
+  UpdateWorker(this.worker_id);
 
   @override
   State<UpdateWorker> createState() => _UpdateWorkerState();
@@ -38,10 +41,9 @@ class _UpdateWorkerState extends State<UpdateWorker> {
   }
 
   Future<void> _viewWorker() async {
-    localStorage = await SharedPreferences.getInstance();
-    worker_id = (localStorage.getString('_id') ?? '');
+    worker_id = widget.worker_id;
     print('worker_id ${worker_id}');
-    var res = await Api().getData('/worker/view-single-worker/' + worker_id);
+    var res = await Api().getData('/worker/view-single-department-worker/' + worker_id);
     var body = json.decode(res.body);
     print(body);
     setState(() {
@@ -56,40 +58,6 @@ class _UpdateWorkerState extends State<UpdateWorker> {
     });
   }
 
-  _update() async {
-    setState(() {
-      var _isLoading = true;
-    });
-
-    var data = {
-      "name": nameController.text,
-      "address": addressController.text,
-      "phone": phnController.text,
-      "_id": worker_id
-    };
-    print(data);
-    var res =
-    await Api().authData(data, '/worker/update-single-worker/' + worker_id);
-    var body = json.decode(res.body);
-
-    if (body['success'] == true) {
-      print(body);
-
-      Fluttertoast.showToast(
-        msg: body['message'].toString(),
-        backgroundColor: Colors.grey,
-      );
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ManageWorkers()));
-    } else {
-      Fluttertoast.showToast(
-        msg: body['message'].toString(),
-        backgroundColor: Colors.grey,
-      );
-    }
-  }
-
   _delete() async {
     setState(() {
       var _isLoading = true;
@@ -98,7 +66,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
     var data = {"_id": worker_id};
     print(data);
     var res =
-    await Api().deleteData( '/worker/delete-single-worker/' + worker_id);
+    await Api().deleteData( '/worker/delete-single-department-worker/' + worker_id);
     var body = json.decode(res.body);
 
     if (body['success'] == true) {
@@ -127,7 +95,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Update Workers"),
+          title: Text(name),
           backgroundColor: Colors.lightBlueAccent,
           leading: IconButton(
               onPressed: () {
@@ -144,16 +112,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Text(
-                    "Update Workers",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.lightBlueAccent),
-                  ),
-                ),
+
                 const SizedBox(
                   height: 40,
                 ),
@@ -172,7 +131,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(
+                  /*  Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         child: Container(
@@ -196,7 +155,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
                           ),
                         ),
                       ),
-                    ),
+                    ),*/
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -237,6 +196,7 @@ class _UpdateWorkerState extends State<UpdateWorker> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0),
       child: TextFormField(
+        enabled: false,
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,

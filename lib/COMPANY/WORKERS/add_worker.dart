@@ -19,13 +19,14 @@ class _AddworkerState extends State<Addworker> {
   bool _isLoading = false;
   late SharedPreferences localStorage;
   late String login_id;
+  late String company_id;
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController phnController = TextEditingController();
   Future<void> getLogin() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_idcompany ${login_id}');
+    company_id = (localStorage.getString('company_id') ?? '');
+    print('login_idcompany ${company_id}');
   }
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _AddworkerState extends State<Addworker> {
     });
 
     var data = {
-      "company_id":login_id.replaceAll('"', ''),
+      "company_id":company_id.replaceAll('"', ''),
       "name": nameController.text,
       "address": addressController.text,
       "phone": phnController.text,

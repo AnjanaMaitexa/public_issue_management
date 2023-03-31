@@ -18,7 +18,7 @@ class _UpdateTenderState extends State<UpdateTender> {
   bool _isLoading = false;
   String name="";
   String description="";
-  String sstartDate="";
+  late String sstartDate;
   String eendDate="";
   late SharedPreferences localStorage;
   late String tender_id;
@@ -134,7 +134,36 @@ class _UpdateTenderState extends State<UpdateTender> {
       );
     }
   }
+  _delete() async {
+    setState(() {
+      var _isLoading = true;
+    });
 
+    var data = {"_id": tender_id};
+    print(data);
+    var res =
+    await Api().deleteData( '/tender/delete-tender/' + tender_id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => TenderManage()));
+      print(body['message']);
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
@@ -268,31 +297,61 @@ class _UpdateTenderState extends State<UpdateTender> {
                 SizedBox(
                   height: 30,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.lightBlueAccent),
-                    height:50,
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _update();
-                        });
-                      /*  Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TenderManage(),));
-                   */   },
-                      child: Text(
-                        "UPDATE",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.lightBlueAccent),
+                          height:50,
+                          width: MediaQuery.of(context).size.width,
+                          child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _update();
+                              });
+                             },
+                            child: Text(
+                              "UPDATE",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.lightBlueAccent),
+                          height: 50,
+                          child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _delete();
+                              });
+                            },
+                            child: Text(
+                              "DELETE",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

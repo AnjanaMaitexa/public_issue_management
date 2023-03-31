@@ -1,33 +1,96 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/DEPARTMENT/TASK/depart_task.dart';
+import 'package:public_issue_management/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateTask extends StatefulWidget {
-  const UpdateTask({Key? key}) : super(key: key);
+  String task_id;
+
+  UpdateTask(this.task_id);
 
   @override
   State<UpdateTask> createState() => _UpdateTaskState();
 }
 
 class _UpdateTaskState extends State<UpdateTask> {
-  final List<String> compTitle = [
-    'Water',
-    'ElectricLine',
-    'StreetLight',
-  ];
-  String? selectTitle;
-  final List<String> compny = [
-    'CompanyA',
-    'CompanyB',
-    'CompanyC',
-  ];
-  String? selectComp;
+
+  TextEditingController taskController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController desController = TextEditingController();
+
+  String task="";
+  String date="";
+  String desc="";
+  late SharedPreferences localStorage;
+  late String department_id;
+  late String tasks_id;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  getLogin();
+    _viewTask();
+  }
+
+
+  Future<void> _viewTask() async {
+    tasks_id = widget.task_id;
+    print('tasks_id ${tasks_id}');
+    var res = await Api().getData('/task/view-single-task/' + tasks_id);
+    var body = json.decode(res.body);
+    print(body);
+    setState(() {
+      task = body['data']['task_name'];
+      // print(name);
+      date = body['data']['date'];
+      desc = body['data']['description'];
+      taskController.text=task;
+      dateController.text=date;
+      desController.text=desc;
+
+    });
+  }
+  _delete() async {
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {"_id": tasks_id};
+    print(data);
+    var res =
+    await Api().deleteData( '/task/delete-task/' + tasks_id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Depart_Task()));
+      print(body['message']);
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Update Task"),
+          title: Text("Delete Task"),
           backgroundColor: Colors.lightBlueAccent,
           leading: IconButton(onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
@@ -44,78 +107,21 @@ class _UpdateTaskState extends State<UpdateTask> {
 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Text("Update Task",
+                  child: Text("Delete Task",
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.lightBlueAccent
                     ),),
                 ),
-                const SizedBox(
-                  height: 20,
-                ), Padding(
-                  padding: const EdgeInsets.only(left:40.0,right: 40),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)) ,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                        hint: Text('SelectComplaint'),
-                        value: selectTitle,
-                        items: compTitle
-                            .map((type) => DropdownMenuItem<String>(
-                          value: type,
-                          child: Text(
-                            type,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ))
-                            .toList(),
-                        onChanged: (type) {
-                          setState(() {
-                            selectTitle = type;
-                          });
-                        }),
-                  ),
-                ),
+
                 SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.only(left:40.0,right: 40),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)) ,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                        hint: Text('Select Company'),
-                        value: selectComp,
-                        items: compny
-                            .map((type) => DropdownMenuItem<String>(
-                          value: type,
-                          child: Text(
-                            type,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ))
-                            .toList(),
-                        onChanged: (type) {
-                          setState(() {
-                            selectComp = type;
-                          });
-                        }),
-                  ),
-                ),
+
                 SizedBox(height: 10,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextField(
+                    controller: taskController,
                     decoration: InputDecoration(
                       hintText: "Task name",
                       border:
@@ -130,9 +136,25 @@ class _UpdateTaskState extends State<UpdateTask> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextField(
+                    controller: dateController,
                     maxLines: 2,
                     decoration: InputDecoration(
-                      hintText: "Status",
+                      hintText: "Date",
+                      border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+
+                  ),
+                ),   SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextField(
+                    controller: desController,
+                    maxLines: 2,
+                    decoration: InputDecoration(
+                      hintText: "Description",
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                     ),
@@ -156,11 +178,10 @@ class _UpdateTaskState extends State<UpdateTask> {
                         .width,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Depart_Task(),));
+                       _delete();
                       },
                       child: Text(
-                        "UPDATE",
+                        "Delete",
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
