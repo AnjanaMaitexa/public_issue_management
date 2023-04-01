@@ -40,7 +40,7 @@ class _UpdateTaskState extends State<UpdateTask> {
   Future<void> _viewTask() async {
     tasks_id = widget.task_id;
     print('tasks_id ${tasks_id}');
-    var res = await Api().getData('/task/view-single-task/' + tasks_id);
+    var res = await Api().postData('/task/view-single-task/' + tasks_id);
     var body = json.decode(res.body);
     print(body);
     setState(() {

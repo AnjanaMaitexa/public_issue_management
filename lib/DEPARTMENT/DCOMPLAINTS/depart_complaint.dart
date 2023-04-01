@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/DEPARTMENT/DCOMPLAINTS/model_comp.dart';
 import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api.dart';
 
@@ -15,7 +16,8 @@ class ViewComplaints extends StatefulWidget {
 }
 
 class _ViewComplaintsState extends State<ViewComplaints> {
-
+  late SharedPreferences localStorage;
+  late String login_id;
   List _loadedComplaints = [];
   @override
   void initState() {
@@ -25,9 +27,13 @@ class _ViewComplaintsState extends State<ViewComplaints> {
   }
 
   _fetchData() async {
-
+    localStorage = await SharedPreferences.getInstance();
+    login_id = (localStorage.getString('login_id') ?? '');
+   // depart_id = (localStorage.getString('department_id') ?? '');
+    print('login_depart ${login_id}');
+   // print('login_newdepart ${depart_id}');
     var res = await Api()
-        .getData('/complaint/view-all-complaints' );
+        .getData('/complaint/user-added-complaints/' + login_id.replaceAll('"', '') );
     //  print(res);
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];

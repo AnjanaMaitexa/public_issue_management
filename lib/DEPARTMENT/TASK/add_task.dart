@@ -59,7 +59,7 @@ class _DepartAddTaskState extends State<DepartAddTask> {
         .getData('/worker/department-view-all-workers/' + login_id.replaceAll('"', ''));
 
     var body = json.decode(res.body);
-
+    print("response body${body}");
     setState(() {
       worker=body['data'];
       worker_id = body['data'][0]['_id'];
@@ -85,6 +85,10 @@ class _DepartAddTaskState extends State<DepartAddTask> {
     var body = json.decode(res.body);
 
     print('addedtask${body}');
+    worker_id=body['details']['worker_id'];
+    print("worker_id${worker_id}");
+    localStorage = await SharedPreferences.getInstance();
+    localStorage.setString('_id', worker_id.toString());
     if(body['success']==true) {
       Fluttertoast.showToast(
         msg: body['message'].toString(),

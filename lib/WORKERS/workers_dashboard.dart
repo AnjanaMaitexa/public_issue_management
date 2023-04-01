@@ -13,13 +13,16 @@ class WorkersDashboard extends StatefulWidget {
 
 class _WorkersDashboardState extends State<WorkersDashboard> {
   late SharedPreferences localStorage;
-  late String login_id,depart_id;
+  late String worker_id;
+  final myImageAndCaption = [
+    ["images/user.png", "Profile"],
+    ["images/complaint.png", "Complaint"],
+    ["images/complaint.png", "Logout"],
+  ];
   Future<void> getLogin() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    depart_id = (localStorage.getString('department_id') ?? '');
-    print('login_depart ${login_id}');
-    print('login_newdepart ${depart_id}');
+    worker_id = (localStorage.getString('_id') ?? '');
+    print('login_worker_idd ${worker_id}');
   }
   @override
   void initState() {

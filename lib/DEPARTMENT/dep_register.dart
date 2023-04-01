@@ -113,6 +113,11 @@ class _Dep_RegState extends State<Dep_Reg> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
+                    validator: (value){
+                      if(value == null || value.isEmpty){
+                        return "Please choose a name to use";
+                      }
+                    },
                     controller: nameController,
                     decoration: InputDecoration(
                       hintText:"DepartmentName" ,
@@ -128,6 +133,11 @@ class _Dep_RegState extends State<Dep_Reg> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
+                    validator: (value){
+                    if(value == null || value.isEmpty){
+                      return "Please choose a address to use";
+                    }
+                  },
                     controller: addressController,
                     maxLines: 2,
                     decoration: InputDecoration(
@@ -145,6 +155,19 @@ class _Dep_RegState extends State<Dep_Reg> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                     controller: emailController,
+                    validator: (valueMail) {
+                      if (valueMail!.isEmpty) {
+                        return 'Please enter Email Id';
+                      }
+                      RegExp email = new RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                      if (email.hasMatch(valueMail)) {
+                        return null;
+                      } else {
+                        return 'Invalid Email Id';
+                      }
+                    },
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText:"Email" ,
                       border:
@@ -160,6 +183,17 @@ class _Dep_RegState extends State<Dep_Reg> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child:TextFormField(
                     controller: phnController,
+                    validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter Mobile Number';
+                    }
+                    RegExp number = new RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
+                    if (number.hasMatch(value)) {
+                      return null;
+                    } else {
+                      return 'Invalid Mobile Number';
+                    }
+                  },
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText:"Phone" ,
@@ -176,6 +210,11 @@ class _Dep_RegState extends State<Dep_Reg> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child:TextFormField(
                     controller: descController,
+                    validator: (value){
+                      if(value == null || value.isEmpty){
+                        return "Please choose a description to use";
+                      }
+                    },
                     maxLines: 2,
                     decoration: InputDecoration(
                       hintText:"Description" ,
@@ -192,6 +231,11 @@ class _Dep_RegState extends State<Dep_Reg> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                     controller: userController,
+                    validator: (value){
+                      if(value == null || value.isEmpty){
+                        return "Please choose a username to use";
+                      }
+                    },
                     decoration: InputDecoration(
                       hintText:"Username" ,
                       border:
@@ -207,8 +251,18 @@ class _Dep_RegState extends State<Dep_Reg> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                     controller: passwordController,
+                    validator: (valuePass) {
+                      if (valuePass!.isEmpty) {
+                        return 'Please enter your Password';
+                      }else if(valuePass.length<6){
+                        return 'Password too short';
+                      } else {
+                        return null;
+                      }
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
+
                       hintText:"Password" ,
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
@@ -222,6 +276,15 @@ class _Dep_RegState extends State<Dep_Reg> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
+                    validator: (valuePass) {
+                      if (valuePass!.isEmpty) {
+                        return 'Please enter your Password';
+                      }else if(valuePass.length<6){
+                        return 'Password too short';
+                      } else {
+                        return null;
+                      }
+                    },
                     controller: confirmController,
                     obscureText: true,
                     decoration: InputDecoration(

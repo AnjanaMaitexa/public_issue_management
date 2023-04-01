@@ -107,10 +107,6 @@ class _Depart_TaskState extends State<Depart_Task> {
                                       Column(
                                         crossAxisAlignment:CrossAxisAlignment.start,
                                         children: [
-                                          Text(_loadedTask[index]['_id'],
-                                            style:TextStyle(
-                                              fontSize: 18,
-                                            ) ,),
                                           Text(_loadedTask[index]['task_name'],
                                             style:TextStyle(
                                               fontSize: 18,

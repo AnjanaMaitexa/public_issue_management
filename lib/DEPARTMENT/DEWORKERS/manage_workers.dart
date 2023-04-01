@@ -44,11 +44,8 @@ class _ManageWorkersState extends State<ManageWorkers> {
       print(body);
       setState(()  {
         _loadedWorkers = body;
-        /*  worker_id=int.parse(body['data']['_id']).toString();
-        print("worker_id${worker_id}");
-       localStorage = await SharedPreferences.getInstance();
-        localStorage.setString('_id', worker_id.toString());
-*/
+
+
       });
     } else {
       setState(() {

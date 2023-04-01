@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/WORKERS/viewwork.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,35 +15,33 @@ class ViewDetailTask extends StatefulWidget {
 
 class _ViewDetailTaskState extends State<ViewDetailTask> {
 
-  bool _isLoading = false;
+  List _loadedTask = [];
+  bool isLoading = false;
   late SharedPreferences localStorage;
-  late String login_id;
+  late String worker_id;
   TextEditingController nameController = TextEditingController();
   TextEditingController desController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  Future<void> getLogin() async {
-    localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_idcompany ${login_id}');
-  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLogin();
+    _fetchData();
   }
 
   _fetchData() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('worker_id ${login_id}');
+    worker_id = (localStorage.getString('worker_id') ?? '');
+    print('worker_idcompany ${worker_id}');
     var res = await Api()
-        .getData('/task/worker-view-task/' + login_id.replaceAll('"', ''));
+        .getData('/task/worker-view-task/' + worker_id.replaceAll('"', ''));
     if (res.statusCode == 200) {
       var body = json.decode(res.body)['data'];
       print(body);
       setState(()  {
-     //   _loadedWorkers = body;
+        _loadedTask = body;
+        print("_loadedTask${_loadedTask}");
         /*  worker_id=int.parse(body['data']['_id']).toString();
         print("worker_id${worker_id}");
        localStorage = await SharedPreferences.getInstance();
@@ -51,7 +50,11 @@ class _ViewDetailTaskState extends State<ViewDetailTask> {
       });
     } else {
       setState(() {
-       // _loadedWorkers = [];
+        _loadedTask = [];
+        Fluttertoast.showToast(
+          msg:"No added Task",
+          backgroundColor: Colors.grey,
+        );
       });
     }
   }
@@ -70,96 +73,57 @@ class _ViewDetailTaskState extends State<ViewDetailTask> {
           },
               icon: Icon(Icons.arrow_back)),
         ),
-        body:Container(
-          child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        body: ListView.builder(
+          shrinkWrap:true,
+          itemCount:  _loadedTask.length,
+          itemBuilder: (context,index){
+            return GestureDetector(
+              onTap: ()async {
+              /*  tender_id=_loadedTender[index]['_id'];
+                prefs = await SharedPreferences.getInstance();
+                prefs.setString('_id', tender_id.toString());
+                print("tender ${tender_id}");
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: Text( "View Task",
-                  style:TextStyle(
-                      fontSize:20,
-                      fontWeight:FontWeight.bold,
-                      color:Colors.lightBlueAccent
-                  ),),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText:"TenderName" ,
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextFormField(
-                  controller: desController,
-                  decoration: InputDecoration(
-                    hintText:"Description" ,
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: TextFormField(
-                  controller: dateController,
-                  decoration: InputDecoration(
-                    hintText:"Description" ,
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-
-
-
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UpdateTender(),
+                ));*/
+              },
+              child: Card(
                 child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.lightBlueAccent),
-                  height:50,
-                  width: MediaQuery.of(context).size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                    //    addTender();
-                      });   },
-                    child: Text(
-                      "SUBMIT",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment:CrossAxisAlignment.start,
+                          children: [
+                            Text(_loadedTask[index]['tender_name'],
+                              style:TextStyle(
+                                fontSize: 18,
+                              ) ,),
+                            Text("StartDate:"+ _loadedTask[index]['job_start_date'],
+                              style:TextStyle(
+                                fontSize: 18,
+                              ) ,),
+                            Text("EndDate:"+_loadedTask[index]['job_end_date'],
+                                style:TextStyle(
+                                  fontSize: 18,
+                                )),
+
+                          ],
+                        ),
+                      ),
+
+                    ],
+
                   ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
-      ),
+
+    ),
     );
   }
 }
