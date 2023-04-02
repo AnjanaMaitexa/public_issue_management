@@ -100,160 +100,162 @@ class _AddworkerState extends State<Addworker> {
           },
               icon: Icon(Icons.arrow_back)),
         ),
-        body:Container(
-          child:Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.always,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+        body:SingleChildScrollView(
+          child: Container(
+            child:Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.always,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Text( "Add Workers",
-                    style:TextStyle(
-                        fontSize:20,
-                        fontWeight:FontWeight.bold,
-                        color:Colors.lightBlueAccent
-                    ),),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField(
-                    validator: (value){
-                      if(value == null || value.isEmpty){
-                        return "Please choose a name to use";
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Text( "Add Workers",
+                      style:TextStyle(
+                          fontSize:20,
+                          fontWeight:FontWeight.bold,
+                          color:Colors.lightBlueAccent
+                      ),),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return "Please choose a name to use";
+                        }
+                      },
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText:"Workers Name" ,
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return "Please choose a address to use";
+                        }
+                      },
+                      controller: addressController,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        hintText:"Address" ,
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                        validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter Mobile Number';
+                      }
+                      RegExp number = new RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
+                      if (number.hasMatch(value)) {
+                        return null;
+                      } else {
+                        return 'Invalid Mobile Number';
                       }
                     },
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      hintText:"Workers Name" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
+                      keyboardType: TextInputType.number,
+                      controller: phnController,
+                      decoration: InputDecoration(
+                        hintText:"Phone" ,
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
 
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField(
-                    validator: (value){
-                      if(value == null || value.isEmpty){
-                        return "Please choose a address to use";
-                      }
-                    },
-                    controller: addressController,
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      hintText:"Address" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                     ),
-
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
                       validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter Mobile Number';
-                    }
-                    RegExp number = new RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
-                    if (number.hasMatch(value)) {
-                      return null;
-                    } else {
-                      return 'Invalid Mobile Number';
-                    }
-                  },
-                    keyboardType: TextInputType.number,
-                    controller: phnController,
-                    decoration: InputDecoration(
-                      hintText:"Phone" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                        if (value!.isEmpty) {
+                          return 'Please enter username';
+                        }
+
+                      },
+                      controller: userControllerr,
+                      decoration: InputDecoration(
+                        hintText:"Username" ,
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+
                     ),
-
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter username';
-                      }
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter Password';
+                        }
 
-                    },
-                    controller: userControllerr,
-                    decoration: InputDecoration(
-                      hintText:"Username" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      },
+                      controller: pwdController,
+                      decoration: InputDecoration(
+                        hintText:"Password" ,
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+
                     ),
-
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: TextFormField(
-                    obscureText: true,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter Password';
-                      }
-
-                    },
-                    controller: pwdController,
-                    decoration: InputDecoration(
-                      hintText:"Password" ,
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-
+                  SizedBox(
+                    height: 30,
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.lightBlueAccent),
-                    height:50,
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                      onPressed: () {
-                        registerWorker();
-                          },
-                      child: Text(
-                        "SUBMIT",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.lightBlueAccent),
+                      height:50,
+                      width: MediaQuery.of(context).size.width,
+                      child: TextButton(
+                        onPressed: () {
+                          registerWorker();
+                            },
+                        child: Text(
+                          "SUBMIT",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

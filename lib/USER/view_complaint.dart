@@ -25,7 +25,8 @@ class _View_CompState extends State<View_Comp> {
   late SharedPreferences localStorage;
 
   late String login_id;
-  bool isExpanded = false;
+  late bool _isExpanded;
+  late bool isExpanded=false;
   List complaints = [];
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _View_CompState extends State<View_Comp> {
     super.initState();
     //  getLogin();
     viewComplaint();
+    _isExpanded = false;
   }
 
   void viewComplaint()async{
@@ -94,45 +96,66 @@ class _View_CompState extends State<View_Comp> {
             itemBuilder: (context,index){
               return Card(
             child:Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(complaints[index]['complaint_title']),
-                        Text(complaints[index]['description']),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(complaints[index]['complaint_title']),
+                            Text(complaints[index]['description']),
+                          ],
+                        ),
 
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children:[
-                      GestureDetector(
-                        onTap: () {
+                      ),
+                  /*    ExpandIcon(
+                        isExpanded: _isExpanded,
+                        color: Colors.black,
+                        expandedColor: Colors.black,
+                        disabledColor: Colors.grey,
+                        onPressed: (bool isExpanded) {
                           setState(() {
-                            isExpanded = !isExpanded;
+                            _isExpanded = isExpanded;
                           });
                         },
-                        child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
-                      ),
-                      Visibility(
-                        visible: isExpanded,
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          height: isExpanded ? 50.0 : 0.0,
-                          child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                      ),*/
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children:[
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isExpanded = !isExpanded;
+                              });
+                            },
+                            child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
+                          ),
+                          Visibility(
+                            visible: isExpanded,
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 300),
+                              height: isExpanded ? 50.0 : 0.0,
+                              child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                            ),
+                          )
+                          ],
                         ),
                       )
-                      ],
+                    ],
+                  ),
+              /*    Visibility(
+                    visible: _isExpanded,
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child:  Text("No reply available"), *//*(complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']*//*)
                     ),
-                  )
-
+*/
                 ],
               ),
             )

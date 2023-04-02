@@ -63,10 +63,10 @@ class _EditProfileState extends State<EditProfile> {
 
     var data = {
       "name": nameController.text,
-      "address": addressController.text,
+    //  "address": addressController.text,
       "email": emailController.text,
       "phone": phnController.text,
-      "loginid": loginid
+      "login_id": loginid.replaceAll('"', '')
     };
     print(data);
     var res = await Api().authData(data, '/signup/update-profile');
@@ -135,10 +135,8 @@ class _EditProfileState extends State<EditProfile> {
                           SizedBox(
                             height: 12,
                           ),
-                          buildTextField("Address", address, addressController),
-                          SizedBox(
-                            height: 12,
-                          ),
+                       //   buildTextField("Address", address, addressController),
+
                           buildTextField("Phone", phn, phnController),
                           SizedBox(
                             height: 25,

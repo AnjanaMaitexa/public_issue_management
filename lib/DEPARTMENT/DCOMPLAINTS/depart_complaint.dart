@@ -18,7 +18,7 @@ class ViewComplaints extends StatefulWidget {
 
 class _ViewComplaintsState extends State<ViewComplaints> {
   late SharedPreferences localStorage;
-  late String login_id;
+  late String depart_id;
   late String complaint_id;
   bool _isLoading = false;
   TextEditingController replyController = TextEditingController();
@@ -32,16 +32,16 @@ class _ViewComplaintsState extends State<ViewComplaints> {
 
   _fetchData() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-   // depart_id = (localStorage.getString('department_id') ?? '');
-    print('login_depart ${login_id}');
+  //  login_id = (localStorage.getString('login_id') ?? '');
+    depart_id = (localStorage.getString('department_id') ?? '');
+    print('login_depart ${depart_id}');
    // print('login_newdepart ${depart_id}');
     var res = await Api()
-        .getData('/complaint/view-all-complaints');
-    //  print(res);
+        .getData('/complaint/view-all-complaints/'+depart_id.replaceAll('"', ''));
+      print(res);
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
-      //   print(items);
+         print(items);
       setState(() {
         _loadedComplaints = items;
         print(_loadedComplaints);
