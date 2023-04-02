@@ -109,7 +109,7 @@ class _View_CompState extends State<View_Comp> {
 
                   ),
 
-                 /* Padding(
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children:[
@@ -131,7 +131,7 @@ class _View_CompState extends State<View_Comp> {
                       )
                       ],
                     ),
-                  )*/
+                  )
 
                 ],
               ),
