@@ -249,6 +249,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: TextFormField(
+              obscureText: true,
               validator: (valuePass) {
                 if (valuePass!.isEmpty) {
                   return 'Please enter your Password';
@@ -273,6 +274,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: TextFormField(
+              obscureText: true,
               validator: (valueConPass) {
                 if (valueConPass!.isEmpty) {
                   return 'Please confirm your Password';

@@ -72,7 +72,7 @@ class _ComplaintState extends State<Complaint> {
 
     setState(() {
      department=body['data'];
-     depart_id = body['data'][0]['_id'];
+    // depart_id = body['data'][0]['_id'];
 
     });
   }
@@ -95,7 +95,7 @@ class _ComplaintState extends State<Complaint> {
 
     var data = {
       "login_id":login_id.replaceAll('"', '') ,
-      "department_id":depart_id,
+      "department_id":dropDownValue,
       "complaint_title": _compcontroller.text,
       "description": _descontroller.text,
       "image":_filename,

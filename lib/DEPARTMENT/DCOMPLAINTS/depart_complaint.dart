@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/DEPARTMENT/DCOMPLAINTS/model_comp.dart';
 import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,9 @@ class ViewComplaints extends StatefulWidget {
 class _ViewComplaintsState extends State<ViewComplaints> {
   late SharedPreferences localStorage;
   late String login_id;
+  late String complaint_id;
+  bool _isLoading = false;
+  TextEditingController replyController = TextEditingController();
   List _loadedComplaints = [];
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _ViewComplaintsState extends State<ViewComplaints> {
     print('login_depart ${login_id}');
    // print('login_newdepart ${depart_id}');
     var res = await Api()
-        .getData('/complaint/user-added-complaints/' + login_id.replaceAll('"', '') );
+        .getData('/complaint/view-all-complaints');
     //  print(res);
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
@@ -48,6 +52,42 @@ class _ViewComplaintsState extends State<ViewComplaints> {
         _loadedComplaints = [];
       });
     }
+  }
+  _reply(String complaint_id)async{
+      setState(() {
+        _isLoading = true;
+      });
+
+      var data = {
+        "_id":complaint_id,
+        "reply": replyController.text,
+
+      };
+      print(data);
+      var res = await Api().authData(data,'/complaint/reply-complaints/' + complaint_id);
+      var body = json.decode(res.body);
+
+
+      if(body['success']==true)
+      {
+        print('added reply${body}');
+        Fluttertoast.showToast(
+          msg: body['message'].toString(),
+          backgroundColor: Colors.grey,
+        );
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ViewComplaints(),));
+
+      }
+      else
+      {
+        Fluttertoast.showToast(
+          msg: body['message'].toString(),
+          backgroundColor: Colors.grey,
+        );
+
+      }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -65,6 +105,7 @@ class _ViewComplaintsState extends State<ViewComplaints> {
               icon: Icon(Icons.arrow_back)),
         ),
         body:SingleChildScrollView(
+          physics: ScrollPhysics(),
           child: Container(
             child: Column(
                 children:<Widget> [
@@ -79,9 +120,12 @@ class _ViewComplaintsState extends State<ViewComplaints> {
                   ),
                   SizedBox(height:20),
                   ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap:true,
                     itemCount:  _loadedComplaints.length,
                     itemBuilder: (context,index){
+                      complaint_id=_loadedComplaints[index]['_id'];
+                      print('complaint reply id${complaint_id}');
                       return Card(
                         child: Container(
                           child: Padding(
@@ -119,12 +163,13 @@ class _ViewComplaintsState extends State<ViewComplaints> {
                                             Container(
                                               child: Padding(
                                                 padding: const EdgeInsets.all(50.0),
-                                                child: TextField(
+                                                child: TextFormField(
                                                   decoration: InputDecoration(
                                                     hintText:"Reply" ,
                                                     border:
                                                     OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                                                   ),
+                                                  controller: replyController,
 
                                                 ),
                                               ),
@@ -140,8 +185,8 @@ class _ViewComplaintsState extends State<ViewComplaints> {
                                                 width: MediaQuery.of(context).size.width,
                                                 child: TextButton(
                                                   onPressed: () {
-                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                      builder: (context) => ViewComplaints(),));
+                                                    _reply(complaint_id);
+
                                                   },
                                                   child: Text(
                                                     "REPLY",

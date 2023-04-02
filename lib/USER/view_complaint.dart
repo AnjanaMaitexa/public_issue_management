@@ -2,54 +2,66 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/USER/Model/complaint_model.dart';
 import 'package:public_issue_management/USER/add_complaint.dart';
 import 'package:public_issue_management/USER/complaint.dart';
 import 'package:public_issue_management/USER/user_dashboard.dart';
 import 'package:public_issue_management/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class View_Comp extends StatelessWidget {
+
+class View_Comp extends StatefulWidget {
   const View_Comp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-     return MaterialApp(
-    title: 'User Dashboard',
-       debugShowCheckedModeBanner: false,
-      home:view_complaint(),
-    );
-  }
-}
-class view_complaint extends StatefulWidget {
-  const view_complaint({super.key});
-
-  @override
-  State<view_complaint> createState() => _view_complaintState();
+  State<View_Comp> createState() => _View_CompState();
 }
 
-class _view_complaintState extends State<view_complaint> {
+class _View_CompState extends State<View_Comp> {
   String complaint='';
   String description='';
   String statuss='';
+  late SharedPreferences localStorage;
 
-void viewComplaint()async{
-  var res = await Api().getData('/complaint/view-all-complaints');
+  late String login_id;
+  bool isExpanded = false;
+  List complaints = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  getLogin();
+    viewComplaint();
+  }
+
+  void viewComplaint()async{
+    localStorage = await SharedPreferences.getInstance();
+    login_id = (localStorage.getString('login_id') ?? '');
+
+  var res = await Api().getData('/complaint/user-added-complaints/'+login_id.replaceAll('"', ''));
   var body = json.decode(res.body);
   print(body);
-  setState(() {
-    complaint = body['data'];
-    description = body['data'][0]['_id'];
-    statuss = body['data'][0]['_id'];
-    //print(depart_id);
-  });
-}
-static List<String>complaints=['Water Supply issue','Draianage','Electric Line',];
-static List<String>desc=['Water is stopped','Drainage overflow','Broken',];
-static List<String>status=['Done','Progress','Done',];
+  if (res.statusCode == 200) {
+      var body = json.decode(res.body)['data'];
+      print(body);
+      setState(()  {
+        complaints = body;
 
-final List<complaint_model>model=List.generate(complaints.length, (index)
- => complaint_model(complaints[index],desc[index],status[index]));
-//pass data to the data model
+
+      });
+    } else {
+      setState(() {
+        complaints = [];
+        Fluttertoast.showToast(
+          msg: "No Complaints yet",
+          backgroundColor: Colors.grey,
+        );
+
+
+      });
+    }
+}
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -81,12 +93,51 @@ final List<complaint_model>model=List.generate(complaints.length, (index)
             itemCount: complaints.length,
             itemBuilder: (context,index){
               return Card(
-            child: ListTile(
-              title: Text(model[index].complaints),
-              subtitle:Text(model[index].desc),
-              trailing:Text(model[index].status)
-              
-            ),
+            child:Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(complaints[index]['complaint_title']),
+                        Text(complaints[index]['description']),
+                      ],
+                    ),
+
+                  ),
+
+                 /* Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children:[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded = !isExpanded;
+                          });
+                        },
+                        child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
+                      ),
+                      Visibility(
+                        visible: isExpanded,
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          height: isExpanded ? 50.0 : 0.0,
+                          child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                        ),
+                      )
+                      ],
+                    ),
+                  )*/
+
+                ],
+              ),
+            )
+
+
               );
             },
             )
@@ -99,7 +150,7 @@ final List<complaint_model>model=List.generate(complaints.length, (index)
             builder: (context) => Complaint(),
           ));
         },
-        tooltip: 'Increment',
+        tooltip: 'Add Complaints',
         child: const Icon(Icons.add),
       ), 
     );

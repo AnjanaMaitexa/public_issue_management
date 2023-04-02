@@ -26,7 +26,9 @@ class _TenderManageState extends State<TenderManage> {
   String desc="";
   List _loadedTender = [];
   bool isLoading = false;
-
+  String approve="1";
+  String reject="0";
+  String status="";
   @override
   void initState() {
     // TODO: implement initState
@@ -48,7 +50,8 @@ class _TenderManageState extends State<TenderManage> {
       //   print(items);
       setState(() {
         _loadedTender = items;
-        print(_loadedTender);
+
+        print('itemsloaded${_loadedTender}');
 
       });
     } else {
@@ -62,17 +65,13 @@ class _TenderManageState extends State<TenderManage> {
     }
   }
 
-  _acceptTender() async{
+  _acceptTender(String tender_id) async{
     setState(() {
       var _isLoading = true;
     });
 
     var data = {
-    /*  "tender_name": nameTController.text,
-      "job_start_date":startController.text,
-      "job_end_date": endController.text,
-      "description": desController.text
-*/
+      "tender_id": tender_id,
     };
     print(data);
     var res =
@@ -96,12 +95,13 @@ class _TenderManageState extends State<TenderManage> {
       );
     }
   }
-  _rejectTender() async{
+  _rejectTender(String tender_id) async{
     setState(() {
       var _isLoading = true;
     });
 
     var data = {
+      "_id":tender_id
       /*  "tender_name": nameTController.text,
       "job_start_date":startController.text,
       "job_end_date": endController.text,
@@ -162,52 +162,100 @@ class _TenderManageState extends State<TenderManage> {
                 ListView.builder(
                   shrinkWrap:true,
                   itemCount: _loadedTender.length,
+
                   itemBuilder: (context,index){
-                    return Card(
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                crossAxisAlignment:CrossAxisAlignment.start,
-                                children: [
-                                  Text(_loadedTender[index]['tender_name'],
-                                    style:TextStyle(
-                                      fontSize: 18,
-                                    ) ,),
-                                  Text("StartDate:"+ _loadedTender[index]['job_start_date'],
-                                    style:TextStyle(
-                                      fontSize: 18,
-                                    ) ,),
-                                  Text("EndDate:"+_loadedTender[index]['job_end_date'],
+                    return GestureDetector(
+                      onTap:() async {
+                        tender_id=_loadedTender[index]['_id'];
+                        status=_loadedTender[index]['status'];
+                        prefs = await SharedPreferences.getInstance();
+                        prefs.setString('_id', tender_id.toString());
+                        //   print("worker ${_loadedWorkers[index]['_id']}");
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Wrap(
+                              children: [
+                                SizedBox(height: 50,),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(onPressed: (){
+                                        setState(() {
+
+                                          _acceptTender(tender_id);
+                                        });
+                                      },
+                                          child: Text("Accept")),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(onPressed: (){
+                                        setState(() {
+                                          _rejectTender(tender_id);
+                                        });
+
+                                      },
+                                          child:Text("Reject")),
+                                    )
+                                  ],
+                                )
+                              ],
+                            );
+                          },
+                        );
+
+                      },
+                      child: Card(
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment:CrossAxisAlignment.start,
+                                  children: [
+                                    Text(_loadedTender[index]['tender_name'],
                                       style:TextStyle(
                                         fontSize: 18,
-                                      )),
-                                  Text("Description:"+_loadedTender[index]['description'],
+                                      ) ,),
+                                    Text("StartDate:"+ _loadedTender[index]['job_start_date'],
                                       style:TextStyle(
                                         fontSize: 18,
-                                      )),
-                                ],
+                                      ) ,),
+                                    Text("EndDate:"+_loadedTender[index]['job_end_date'],
+                                        style:TextStyle(
+                                          fontSize: 18,
+                                        )),
+                                    Text("Description:"+_loadedTender[index]['description'],
+                                        style:TextStyle(
+                                          fontSize: 18,
+                                        )),
+                                  ],
+                                ),
                               ),
-                            ),
-                            ElevatedButton(onPressed: (){
-                              setState(() {
+                            /*  ElevatedButton(onPressed: (){
+                                setState(() {
 
-                                _acceptTender();
-                              });
-                            },
-                                child: Text("Approve")),
-                            ElevatedButton(onPressed: (){
-                             setState(() {
-                               _rejectTender();
-                             });
+                                  _acceptTender(tender_id);
+                                });
+                              },
+                                  child: Text("Accept")),
+                              ElevatedButton(onPressed: (){
+                               setState(() {
+                                 _rejectTender(tender_id);
+                               });
 
-                            },
-                                child: Text("Reject"))
-                          ],
+                              },
+                                  child: Text("Reject"))*/
+                            ],
 
+                          ),
                         ),
                       ),
                     );

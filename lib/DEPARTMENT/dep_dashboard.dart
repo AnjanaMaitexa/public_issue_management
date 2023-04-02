@@ -34,8 +34,8 @@ Future<void> getLogin() async {
   localStorage = await SharedPreferences.getInstance();
   login_id = (localStorage.getString('login_id') ?? '');
   depart_id = (localStorage.getString('department_id') ?? '');
-  print('login_depart ${login_id}');
-  print('login_newdepart ${depart_id}');
+  print('depart_loginid ${login_id}');
+  print('department_id ${depart_id}');
 }
 @override
 void initState() {

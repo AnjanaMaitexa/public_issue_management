@@ -61,8 +61,8 @@ class _LoginPageState extends State<LoginPage> {
 
       print('login_idss ${json.encode(body['login_id'])}');
       print('login_depart ${json.encode(body['department_id'])}');
-      print('login_company ${json.encode(body['company_id'])}');
-      print('login_company ${json.encode(body['_id'])}');
+      print('company_id ${json.encode(body['company_id'])}');
+      print('_id ${json.encode(body['_id'])}');
 
       /*loginid = (localStorage.getString('login_id') ?? '');
       print(loginid);*/

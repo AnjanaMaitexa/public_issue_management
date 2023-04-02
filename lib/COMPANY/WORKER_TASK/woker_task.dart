@@ -16,7 +16,7 @@ class WorkerTask extends StatefulWidget {
 
 class _WorkerTaskState extends State<WorkerTask> {
   late SharedPreferences localStorage;
-  late String login_id;
+  late String company_id;
   late String worker_id;
   late String task;
   late String workername;
@@ -29,15 +29,15 @@ class _WorkerTaskState extends State<WorkerTask> {
     // TODO: implement initState
     super.initState();
     //  getLogin();
-  //   _fetchData();
+     _fetchData();
   }
 
- /* _fetchData() async {
+  _fetchData() async {
     localStorage = await SharedPreferences.getInstance();
-    login_id = (localStorage.getString('login_id') ?? '');
-    print('login_workerdash ${login_id}');
+    company_id = (localStorage.getString('company_id') ?? '');
+    print('login_workerdash ${company_id}');
     var res = await Api()
-        .getData('/worker/view-all-workers/' + login_id.replaceAll('"', ''));
+        .getData('/tender/assigned-tender/' + company_id.replaceAll('"', ''));
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
       print(items);
@@ -50,7 +50,7 @@ class _WorkerTaskState extends State<WorkerTask> {
         _loadedWorkers = [];
       });
     }
-  }*/
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,20 +77,27 @@ class _WorkerTaskState extends State<WorkerTask> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                        /*  Text(_loadedWorkers[index]['name'],
+                          Text("Tender Name:"+_loadedWorkers[index]['tender_name'],
                               style: TextStyle(
                                 fontSize: 18,
                               )),
-                          Text(_loadedWorkers[index]['task'],
+                          Text("Worker Name:"+_loadedWorkers[index]['worker_name'],
                               style: TextStyle(
                                 fontSize: 18,
                               )),
-                          Text(_loadedWorkers[index]['status'],
-                              style: TextStyle(
-                                fontSize: 18,
-                              )),*/
+
+                               Text("StartDate:"+ _loadedWorkers[index]['start_date'],
+                                        style:TextStyle(
+                                          fontSize: 18,
+                                        ) ,),
+                                      Text("EndDate:"+_loadedWorkers[index]['end_date'],
+                                          style:TextStyle(
+                                            fontSize: 18,
+                                          )),
+
                         ],
                       ),
                     ),

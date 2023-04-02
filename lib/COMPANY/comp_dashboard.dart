@@ -22,8 +22,8 @@ class _DashboardState extends State<Dashboard> {
     localStorage = await SharedPreferences.getInstance();
     login_id = (localStorage.getString('login_id') ?? '');
     company_id = (localStorage.getString('company_id') ?? '');
-    print('companys_id ${company_id}');
-    print('companys_loginid ${login_id}');
+    print('company_loginid ${login_id}');
+    print('company_id ${company_id}');
   }
   @override
   void initState() {

@@ -12,9 +12,9 @@ class ManageComplaint extends StatefulWidget {
 
 class _ManageComplaintState extends State<ManageComplaint> {
 
-  static List<String>complaint=['complaint1','complaint2','complaint3'];
-  static List<String>location=['loc1','loc2','loc3'];
-  static List<String>image=['images/back.jpg','images/back.jpg','images/back.jpg',];
+  static List<String>complaint=['complaint1','complaint2','complaint3','complaint4','complaint5','complaint6'];
+  static List<String>location=['loc1','loc2','loc3','loc4','loc5','loc6'];
+  static List<String>image=['images/street.jpg','images/street.jpg','images/street.jpg','images/street.jpg','images/street.jpg','images/street.jpg'];
 
   final List<Complaint_model>model=List.generate(complaint.length, (index)
   => Complaint_model(complaint[index],image[index],location[index]));
@@ -53,26 +53,18 @@ class _ManageComplaintState extends State<ManageComplaint> {
                   itemCount: complaint.length,
                   itemBuilder: (context,index){
                     return Card(
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.lightBlueAccent,
-                              backgroundImage:AssetImage(image[index]) ,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(model[index].complaint,
-                                  style:TextStyle(
-                                    fontSize: 18,
-                                  ) ,),
-                                Text(model[index].location,
-                                  style:TextStyle(
-                                    fontSize: 18,
-                                  ) ,),
-                              ],
-                            ),
+                      child: ListTile(
+                        leading:  CircleAvatar(
+                          backgroundColor: Colors.lightBlueAccent,
+                          backgroundImage:AssetImage(image[index]) ,),
+                        title:  Text(model[index].complaint,
+                          style:TextStyle(
+                            fontSize: 18,
+                          ) ,),
+                        subtitle: Text(model[index].location,
+                          style:TextStyle(
+                            fontSize: 18,
+                          ) ,),
 
                          /*   ElevatedButton(onPressed: (){},
                                 child: Text("APPROVE")),
@@ -80,9 +72,7 @@ class _ManageComplaintState extends State<ManageComplaint> {
 
                             },
                                 child: Text("REJECT"))*/
-                          ],
 
-                        ),
                       ),
                     );
                   },

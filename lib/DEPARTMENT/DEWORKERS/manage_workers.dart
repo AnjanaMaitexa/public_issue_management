@@ -50,6 +50,10 @@ class _ManageWorkersState extends State<ManageWorkers> {
     } else {
       setState(() {
         _loadedWorkers = [];
+        Fluttertoast.showToast(
+          msg:"No workers yet",
+          backgroundColor: Colors.grey,
+        );
       });
     }
   }

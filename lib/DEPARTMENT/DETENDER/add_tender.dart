@@ -31,12 +31,12 @@ class _AddTenderState extends State<AddTender> {
 
   final _formKey = GlobalKey<FormState>();
   List company = [];
-  String? selectcom;
+  String? selectedId;
   var dropDownValue;
   Future<void> getLogin() async {
     prefs = await SharedPreferences.getInstance();
     depart_id = (prefs.getString('department_id') ?? '');
-    print('login_de ${depart_id}');
+
   }
   Future getAllCompany()async{
     var res = await Api().getData('/signup/view-all-companies');
@@ -44,7 +44,8 @@ class _AddTenderState extends State<AddTender> {
 
     setState(() {
       company=body['data'];
-      company_id = body['data'][0]['_id'];
+
+      print('compans ${company}');
 
     });
   }
@@ -89,7 +90,7 @@ class _AddTenderState extends State<AddTender> {
     });
 
     var data = {
-      "company_id":company_id ,
+      "company_id":selectedId ,
       "department_id":depart_id.replaceAll('"', '') ,
       "tender_name": nameTController.text,
       "job_start_date": startDate,
@@ -258,19 +259,19 @@ class _AddTenderState extends State<AddTender> {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       hint: Text('Company'),
-                      value: dropDownValue,
+                      value: selectedId,
                       items: company
                           .map((type) => DropdownMenuItem<String>(
-                        value: type['_id'].toString(),
+                        value: type['_id'],
                         child: Text(
-                          type['company_name'].toString(),
+                          type['company_name'],
                           style: TextStyle(color: Colors.black),
                         ),
                       ))
                           .toList(),
                       onChanged: (type) {
                         setState(() {
-                          dropDownValue = type;
+                          selectedId = type;
                         });
                       }),
                 ),
