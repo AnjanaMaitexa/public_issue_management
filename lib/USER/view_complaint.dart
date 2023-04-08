@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:public_issue_management/USER/Model/complaint_model.dart';
@@ -48,12 +49,19 @@ class _View_CompState extends State<View_Comp> {
       var body = json.decode(res.body)['data'];
       print(body);
       setState(()  {
-        complaints = body;
-
+       complaints = body;
 
       });
     } else {
       setState(() {
+        Alert(
+          context: context,
+          title: "No added complaints",
+
+          image: Container(
+              height: 100, width: 100, child: Image.asset('images/no.png')),
+        ).show();
+
         complaints = [];
         Fluttertoast.showToast(
           msg: "No Complaints yet",
@@ -64,9 +72,12 @@ class _View_CompState extends State<View_Comp> {
       });
     }
 }
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      backgroundColor: Color(0xF5DCEEFD) ,
       appBar: AppBar(
         title: Text("Complaint Management"),
         backgroundColor: Colors.lightBlueAccent,
@@ -78,93 +89,98 @@ class _View_CompState extends State<View_Comp> {
             icon: Icon(Icons.arrow_back)),
       ),
       body: Container(
-        child: Column(
-          children:<Widget> [
 
-               Padding(
-                 padding: const EdgeInsets.only(top:15.0),
-                 child: Text("Complaints",style: TextStyle(
-                   fontSize:26,
-                   fontWeight: FontWeight.bold,
-                   color:Colors.lightBlueAccent
-                 ),),
-               ),
-               SizedBox(height:20),
-               ListView.builder(
-                 shrinkWrap:true,
-            itemCount: complaints.length,
-            itemBuilder: (context,index){
-              return Card(
-            child:Container(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(complaints[index]['complaint_title']),
-                            Text(complaints[index]['description']),
-                          ],
-                        ),
+        child: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          child: Column(
+            children:<Widget> [
 
-
-                      ),
-                  /*    ExpandIcon(
-                        isExpanded: _isExpanded,
-                        color: Colors.black,
-                        expandedColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        onPressed: (bool isExpanded) {
-                          setState(() {
-                            _isExpanded = isExpanded;
-                          });
-                        },
-                      ),*/
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children:[
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isExpanded = !isExpanded;
-                              });
-                            },
-                            child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
+                 Padding(
+                   padding: const EdgeInsets.only(top:15.0),
+                   child: Text("Complaints",style: TextStyle(
+                     fontSize:26,
+                     fontWeight: FontWeight.bold,
+                     color:Colors.lightBlueAccent
+                   ),),
+                 ),
+                 SizedBox(height:20),
+                 ListView.builder(
+                   physics: NeverScrollableScrollPhysics(),
+                   shrinkWrap:true,
+              itemCount: complaints.length,
+              itemBuilder: (context,index){
+                return Card(
+              child:Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(complaints[index]['complaint_title']),
+                              Text(complaints[index]['description']),
+                            ],
                           ),
-                          Visibility(
-                            visible: isExpanded,
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 300),
-                              height: isExpanded ? 50.0 : 0.0,
-                              child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
-                            ),
-                          )
-                          ],
+
+
                         ),
-                      )
-                    ],
-                  ),
-              /*    Visibility(
-                    visible: _isExpanded,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child:  Text("No reply available"), *//*(complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']*//*)
+                    /*    ExpandIcon(
+                          isExpanded: _isExpanded,
+                          color: Colors.black,
+                          expandedColor: Colors.black,
+                          disabledColor: Colors.grey,
+                          onPressed: (bool isExpanded) {
+                            setState(() {
+                              _isExpanded = isExpanded;
+                            });
+                          },
+                        ),*/
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children:[
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isExpanded = !isExpanded;
+                                });
+                              },
+                              child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
+                            ),
+                            Visibility(
+                              visible: isExpanded,
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                height: isExpanded ? 50.0 : 0.0,
+                                child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                              ),
+                            )
+                            ],
+                          ),
+                        )
+                      ],
                     ),
+                /*    Visibility(
+                      visible: _isExpanded,
+                      child: Padding(
+                        padding: EdgeInsets.all(15),
+                        child:  Text("No reply available"), *//*(complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']*//*)
+                      ),
 */
-                ],
-              ),
-            )
+                  ],
+                ),
+              )
 
 
-              );
-            },
-            )
-        ]),
+                );
+              },
+              )
+          ]),
+        ),
 
       ),
        floatingActionButton: FloatingActionButton(

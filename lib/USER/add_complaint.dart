@@ -171,6 +171,7 @@ class _ComplaintState extends State<Complaint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xF5FFFFFF) ,
         bottomNavigationBar: ElevatedButton(
             style: ElevatedButton.styleFrom
               (backgroundColor: Colors.lightBlueAccent),
@@ -201,10 +202,16 @@ class _ComplaintState extends State<Complaint> {
             padding: const EdgeInsets.all(10.0),
             child: Form(
               key:_formKey,
+              autovalidateMode: AutovalidateMode.always,
               child: Column(
 
                 children: [
                   Container(
+                   /* decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('images/bg.jpg')
+                      )
+                    ),*/
                     child: imageFile == null
                         ? Container(
                       child: Column(

@@ -209,26 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                               // obscureText: _obscureText,
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Forgot(),
-                                ));
-                              },
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.lightBlueAccent),
-                              ),
-                            ),
-                          ),
+
                           SizedBox(
                             height: 20,
                           ),
@@ -299,5 +280,30 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _ExitDialog(BuildContext context) {}
+  _ExitDialog(BuildContext context) async {
+    final shouldPop = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Do you want to go back?'),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+    return shouldPop!;
+  }
 }
