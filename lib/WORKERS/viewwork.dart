@@ -53,7 +53,6 @@ class _ViewWorkTaskState extends State<ViewWorkTask> {
   Widget build(BuildContext context) {
     return Column(
         children:<Widget> [
-
           Padding(
             padding: const EdgeInsets.only(top:15.0),
             child: Text("Tasks",style: TextStyle(

@@ -9,6 +9,7 @@ import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:http/http.dart' as http;
 class Complaint extends StatefulWidget {
   @override
   _ComplaintState createState() => _ComplaintState();
@@ -20,7 +21,7 @@ class _ComplaintState extends State<Complaint> {
   TextEditingController _descontroller = TextEditingController();
   TextEditingController _locontroller = TextEditingController();
   bool _isLoading = false;
-   late final _filename;
+    late final _filename;
   late SharedPreferences prefs;
   late String login_id,depart_id;
 
@@ -139,12 +140,45 @@ class _ComplaintState extends State<Complaint> {
     setState(() {
       _isLoading = true;
     });
+    final uri = Uri.parse('http://192.168.43.28:3000/complaint/upload-image');
+    final request = http.MultipartRequest('POST', uri);
+    final imageStream = http.ByteStream(imageFile!.openRead());
+    final imageLength = await imageFile!.length();
 
-    var data = {
+    final multipartFile = http.MultipartFile(
+      'file',
+      imageStream,
+      imageLength,
+      filename: 'file.jpg',
+    );
+    request.files.add(multipartFile);
+
+    print("multipart${multipartFile}");
+    final response = await request.send();
+    if(response.statusCode == 200)
+    {
+
+      Fluttertoast.showToast(
+        msg:"success",
+        backgroundColor: Colors.grey,
+      );
+
+      //   Navigator.push(context as BuildContext, MaterialPageRoute(builder: (context)=>View_Comp()));
+
+    }
+    else
+    {
+      Fluttertoast.showToast(
+        msg:"Failed",
+        backgroundColor: Colors.grey,
+      );
+
+    }
+   /* var data = {
       "login_id":login_id.replaceAll('"', ''),
-      "image":imageFile,
-
+      "file":imageFile,
     };
+    print("data is${data}");
     var res = await Api().authData(data, '/complaint/upload-image');
     var body = json.decode(res.body);
 
@@ -166,7 +200,7 @@ class _ComplaintState extends State<Complaint> {
         backgroundColor: Colors.grey,
       );
 
-    }
+    }*/
   }
   @override
   Widget build(BuildContext context) {
@@ -372,8 +406,10 @@ class _ComplaintState extends State<Complaint> {
          _filename = basename(imageFile!.path);
         final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
         final _extenion = extension(imageFile!.path);
-
-
+        print("imageFile:${imageFile}");
+        print(_filename);
+        print(_nameWithoutExtension);
+        print(_extenion);
       });
     }
   }
