@@ -55,9 +55,10 @@ class _AddworkerTaskState extends State<AddworkerTask> {
   Future getAllTenders()async{
     localStorage = await SharedPreferences.getInstance();
     company_id = (localStorage.getString('company_id') ?? '');
-    print('login_workerdash ${company_id}');
-    var res = await Api().getData('/tender/company-assign-tender/' +company_id.replaceAll('"', ''));
+
+    var res = await Api().getData('/tender/company-assign-tender/'+company_id.replaceAll('"', ''));
     var body = json.decode(res.body);
+    print("body of ${body}");
 
     setState(() {
       tender=body['data'];

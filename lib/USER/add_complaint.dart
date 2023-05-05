@@ -1,21 +1,26 @@
 import 'dart:convert';
 import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_storage_path/flutter_storage_path.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:http/http.dart' as http;
+
+import 'dart:io' show File;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:file_picker/file_picker.dart';
+
 class Complaint extends StatefulWidget {
   @override
   _ComplaintState createState() => _ComplaintState();
 }
 class _ComplaintState extends State<Complaint> {
-
 
   TextEditingController _compcontroller = TextEditingController();
   TextEditingController _descontroller = TextEditingController();
@@ -30,7 +35,9 @@ class _ComplaintState extends State<Complaint> {
   var dropDownValue;
   /// Variables
   File? imageFile;
+  File? file;
   late String storedImage;
+  String _cityName='';
 
   final _formKey = GlobalKey<FormState>();
   Future<void> _showChoiceDialog(BuildContext context) {
@@ -45,6 +52,7 @@ class _ComplaintState extends State<Complaint> {
                   GestureDetector(
                     child: const Text("Gallery"),
                     onTap: () {
+
                       _getFromGallery();
                       Navigator.pop(context);
                       //  _openGallery(context);
@@ -74,7 +82,6 @@ class _ComplaintState extends State<Complaint> {
     setState(() {
      department=body['data'];
     // depart_id = body['data'][0]['_id'];
-
     });
   }
   Future<void> getLogin() async {
@@ -82,12 +89,15 @@ class _ComplaintState extends State<Complaint> {
     login_id = (prefs.getString('login_id') ?? '');
     print('login_id_complaint ${login_id}');
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getAllDepartments();
     getLogin();
+
+    _getCurrentLocation();
   }
   void addComplaint()async {
     setState(() {
@@ -149,7 +159,7 @@ class _ComplaintState extends State<Complaint> {
       'file',
       imageStream,
       imageLength,
-      filename: 'file.jpg',
+      filename: _filename,
     );
     request.files.add(multipartFile);
 
@@ -202,6 +212,20 @@ class _ComplaintState extends State<Complaint> {
 
     }*/
   }
+  Future<void> _getCurrentLocation() async {
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // Get city name from latitude and longitude
+    final placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+    final cityName = placemarks[0].locality;
+
+    setState(() {
+      _cityName = cityName!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,7 +270,7 @@ class _ComplaintState extends State<Complaint> {
                         image: AssetImage('images/bg.jpg')
                       )
                     ),*/
-                    child: imageFile == null
+                   child: imageFile == null
                         ? Container(
                       child: Column(
                         children: <Widget>[
@@ -268,7 +292,7 @@ class _ComplaintState extends State<Complaint> {
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Image.file(
-                            imageFile!,
+                             imageFile!,
                             width: 100,
                             height: 100,
                             //  fit: BoxFit.cover,
@@ -283,7 +307,8 @@ class _ComplaintState extends State<Complaint> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+
+   SizedBox(height: 10),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -343,7 +368,7 @@ class _ComplaintState extends State<Complaint> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        hintText: 'Location'),
+                        hintText: _cityName == null?"Location Not found":_cityName),
                   ),
                   SizedBox(height: 20),
                   Align(
@@ -427,7 +452,6 @@ class _ComplaintState extends State<Complaint> {
         _filename = basename(imageFile!.path).toString();
         final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
         final _extenion = extension(imageFile!.path);
-
       });
     }
   }

@@ -2,7 +2,10 @@
     package="com.example.public_issue_management">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-   <application
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
         android:label="VoiceOut"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
