@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Api {
-  final String _url = "http://192.168.1.44:3000";
+   String _url = "http://192.168.43.28:3000";
 
   authData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
@@ -31,4 +31,5 @@ class Api {
         Uri.parse(fullUrl),
     );
   }
+
 }

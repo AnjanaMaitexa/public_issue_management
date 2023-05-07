@@ -30,9 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   String role = '';
   String status = '';
   bool _isLoading = false;
-  bool _obscureText = true;
   late String  loginid;
-
+  bool _obscuretext = true;
+  bool passwordVisible = false;
   final email = TextEditingController();
   final pwd = TextEditingController();
   _pressLoginButton() async {
@@ -120,12 +120,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // Toggles the password show status
-  void _toggle() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
-  }
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -195,13 +189,21 @@ class _LoginPageState extends State<LoginPage> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
                             child: TextField(
-                              obscureText: _obscureText,
+                              obscureText: passwordVisible,
                               controller: pwd,
                               decoration: InputDecoration(
                                 hintText: "Password",
-                                suffixIcon: Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  color: Colors.black54,
+                                suffixIcon: IconButton(
+                                  icon: Icon(passwordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                  onPressed: () {
+                                    setState(
+                                          () {
+                                        passwordVisible = !passwordVisible;
+                                      },
+                                    );
+                                  },
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20)),

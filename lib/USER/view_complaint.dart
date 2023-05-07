@@ -24,7 +24,7 @@ class _View_CompState extends State<View_Comp> {
   String description='';
   String statuss='';
   late SharedPreferences localStorage;
-
+String url="http://192.168.43.28:3000/";
   late String login_id;
   late bool _isExpanded;
   late bool isExpanded=false;
@@ -37,7 +37,7 @@ class _View_CompState extends State<View_Comp> {
     viewComplaint();
     _isExpanded = false;
   }
-
+Api api=Api();
   void viewComplaint()async{
     localStorage = await SharedPreferences.getInstance();
     login_id = (localStorage.getString('login_id') ?? '');
@@ -113,56 +113,65 @@ class _View_CompState extends State<View_Comp> {
               child:Container(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
                             children: [
-                              Text(complaints[index]['complaint_title']),
-                              Text(complaints[index]['description']),
-                            ],
-                          ),
 
-
-                        ),
-                    /*    ExpandIcon(
-                          isExpanded: _isExpanded,
-                          color: Colors.black,
-                          expandedColor: Colors.black,
-                          disabledColor: Colors.grey,
-                          onPressed: (bool isExpanded) {
-                            setState(() {
-                              _isExpanded = isExpanded;
-                            });
-                          },
-                        ),*/
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children:[
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isExpanded = !isExpanded;
-                                });
-                              },
-                              child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
-                            ),
-                            Visibility(
-                              visible: isExpanded,
-                              child: AnimatedContainer(
-                                duration: Duration(milliseconds: 300),
-                                height: isExpanded ? 50.0 : 0.0,
-                                child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                              CircleAvatar(
+                                backgroundColor: Colors.lightBlueAccent,
+                                radius: 30,
+                                backgroundImage:NetworkImage(url+"server/public/images/"+complaints[index]['image']) ,),
+                             SizedBox(width: 10,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(complaints[index]['complaint_title']),
+                                  Text(complaints[index]['description']),
+                                ],
                               ),
-                            )
+                          /*    ExpandIcon(
+                                isExpanded: _isExpanded,
+                                color: Colors.black,
+                                expandedColor: Colors.black,
+                                disabledColor: Colors.grey,
+                                onPressed: (bool isExpanded) {
+                                  setState(() {
+                                    _isExpanded = isExpanded;
+                                  });
+                                },
+                              ),*/
+
                             ],
                           ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children:[
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isExpanded = !isExpanded;
+                                    });
+                                  },
+                                  child: isExpanded?Icon(Icons.arrow_drop_up):Icon(Icons.arrow_drop_down),
+                                ),
+                                Visibility(
+                                  visible: isExpanded,
+                                  child: AnimatedContainer(
+                                    duration: Duration(milliseconds: 300),
+                                    height: isExpanded ? 50.0 : 0.0,
+                                    child:  (complaints[index]['reply'] == null) ? Text("No reply available"): Text(complaints[index]['reply']),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                 /*    Visibility(
                       visible: _isExpanded,

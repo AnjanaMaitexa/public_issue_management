@@ -26,12 +26,17 @@ class _ComplaintState extends State<Complaint> {
   TextEditingController _descontroller = TextEditingController();
   TextEditingController _locontroller = TextEditingController();
   bool _isLoading = false;
-    late final _filename;
+  late final _filename;
   late SharedPreferences prefs;
   late String login_id,depart_id;
-
+  Placemark? placemark;
+  String name = '';
+  String street ='';
+  String city = '';
+  String state = '';
+  String zip = '';
+  String country = '';
   List department = [];
-  String? selectdepart;
   var dropDownValue;
   /// Variables
   File? imageFile;
@@ -110,7 +115,7 @@ class _ComplaintState extends State<Complaint> {
       "complaint_title": _compcontroller.text,
       "description": _descontroller.text,
       "image":_filename,
-      "location": _locontroller.text,
+      "location": _cityName,
     };
     print(data);
     // if(data.image){
@@ -217,12 +222,20 @@ class _ComplaintState extends State<Complaint> {
         desiredAccuracy: LocationAccuracy.high);
 
     // Get city name from latitude and longitude
-    final placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
-    final cityName = placemarks[0].locality;
-
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+     placemark = placemarks[0];
+     name = placemark!.name.toString();
+     street = placemark!.street.toString();
+     city = placemark!.locality.toString();
+     state = placemark!.administrativeArea.toString();
+     zip = placemark!.postalCode.toString();
+     country = placemark!.country.toString();
     setState(() {
-      _cityName = cityName!;
+      _cityName = '$name, $street, $city, $state $zip, $country';
+      print(_cityName);
     });
   }
 
@@ -355,21 +368,28 @@ class _ComplaintState extends State<Complaint> {
                     child: Text(
                       'Location',
                       style: TextStyle(
+
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: Colors.black38),
                     ),
                   ),
                   SizedBox(height: 10),
-                  TextFormField(
-                    controller: _locontroller,
-                    // controller: _vehicleNoController,
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        hintText: _cityName == null?"Location Not found":_cityName),
-                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.black38,),
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      height: 80,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(_cityName,
+
+                            style: TextStyle(color: Colors.black, fontSize: 17)),
+                      )),
+
+                  SizedBox(height: 10),
                   SizedBox(height: 20),
                   Align(
                     alignment: Alignment.topLeft,
