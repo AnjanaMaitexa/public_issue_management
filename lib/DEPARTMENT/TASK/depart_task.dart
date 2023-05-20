@@ -89,48 +89,40 @@ class _Depart_TaskState extends State<Depart_Task> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: _loadedTask.length,
                         itemBuilder: (context,index){
-                          return GestureDetector(
-                            onTap: () async {
-
-                              task_id=_loadedTask[index]['_id'];
-                              print("task_id ${task_id}");
-                              Navigator.push(
-                                  context, MaterialPageRoute(builder: (context) => UpdateTask(task_id)));
-                            },
-                            child: Card(
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:CrossAxisAlignment.start,
-                                        children: [
-                                          Text(_loadedTask[index]['task_name'],
+                          task_id=_loadedTask[index]['_id'];
+                          return Card(
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        Text(_loadedTask[index]['task_name'],
+                                          style:TextStyle(
+                                            fontSize: 18,
+                                          ) ,),
+                                        Text(_loadedTask[index]['date'],
+                                          style:TextStyle(
+                                            fontSize: 18,
+                                          ) ,),
+                                        Text(_loadedTask[index]['description'],
                                             style:TextStyle(
                                               fontSize: 18,
-                                            ) ,),
-                                          Text(_loadedTask[index]['date'],
-                                            style:TextStyle(
-                                              fontSize: 18,
-                                            ) ,),
-                                          Text(_loadedTask[index]['description'],
-                                              style:TextStyle(
-                                                fontSize: 18,
-                                              )),
-                                        ],
-                                      ),
+                                            )),
+                                      ],
+                                    ),
 
-                                    /*  ElevatedButton(onPressed: (){
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) => UpdateTask(),
-                                        ));
-                                      },
-                                          child: Text("Update"))*/
-                                    ],
+                                    ElevatedButton(onPressed: (){
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => UpdateTask(task_id:task_id),
+                                      ));
+                                    },
+                                        child: Text("Update"))
+                                  ],
 
-                                  ),
                                 ),
                               ),
                             ),

@@ -7,14 +7,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:public_issue_management/USER/view_complaint.dart';
 import 'package:public_issue_management/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:io' show File;
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:file_picker/file_picker.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -37,13 +36,23 @@ class _ComplaintState extends State<Complaint> {
   String zip = '';
   String country = '';
   List department = [];
+  List category = [];
   var dropDownValue;
+  var dropDownValue2;
   /// Variables
   File? imageFile;
   File? file;
   late String storedImage;
   String _cityName='';
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllDepartments();
+    getLogin();
+    _getCurrentLocation();
+  }
   final _formKey = GlobalKey<FormState>();
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
@@ -85,8 +94,17 @@ class _ComplaintState extends State<Complaint> {
     var body = json.decode(res.body);
 
     setState(() {
-     department=body['data'];
-    // depart_id = body['data'][0]['_id'];
+      department=body['data'];
+      // depart_id = body['data'][0]['_id'];
+    });
+  }
+  Future getAllSubDepartments(String id)async{
+    var res = await Api().getData('/signup/view-all-dipartments');
+    var body = json.decode(res.body);
+
+    setState(() {
+      department=body['data'];
+      // depart_id = body['data'][0]['_id'];
     });
   }
   Future<void> getLogin() async {
@@ -95,15 +113,6 @@ class _ComplaintState extends State<Complaint> {
     print('login_id_complaint ${login_id}');
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getAllDepartments();
-    getLogin();
-
-    _getCurrentLocation();
-  }
   void addComplaint()async {
     setState(() {
       _isLoading = true;
@@ -189,33 +198,7 @@ class _ComplaintState extends State<Complaint> {
       );
 
     }
-   /* var data = {
-      "login_id":login_id.replaceAll('"', ''),
-      "file":imageFile,
-    };
-    print("data is${data}");
-    var res = await Api().authData(data, '/complaint/upload-image');
-    var body = json.decode(res.body);
 
-    if(body['success']==true)
-    {
-      print(body);
-      Fluttertoast.showToast(
-        msg: body['message'].toString(),
-        backgroundColor: Colors.grey,
-      );
-
-   //   Navigator.push(context as BuildContext, MaterialPageRoute(builder: (context)=>View_Comp()));
-
-    }
-    else
-    {
-      Fluttertoast.showToast(
-        msg: body['message'].toString(),
-        backgroundColor: Colors.grey,
-      );
-
-    }*/
   }
   Future<void> _getCurrentLocation() async {
     final position = await Geolocator.getCurrentPosition(
@@ -331,6 +314,7 @@ class _ComplaintState extends State<Complaint> {
                           fontSize: 20,
                           color: Colors.black38),
                     ),
+
                   ),
                   SizedBox(height: 10),
                   TextFormField(
@@ -425,10 +409,10 @@ class _ComplaintState extends State<Complaint> {
                         onChanged: (type) {
                           setState(() {
                             dropDownValue = type;
+                            getAllSubDepartments(dropDownValue);
                           });
                         }),
                   ),
-
 
                 ],
               ),

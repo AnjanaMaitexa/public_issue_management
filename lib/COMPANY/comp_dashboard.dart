@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/COMPANY/COMPLAINTS/manage_complaints.dart';
+import 'package:public_issue_management/COMPANY/TENDER/manage_tender.dart';
 import 'package:public_issue_management/COMPANY/WORKER_TASK/woker_task.dart';
 import 'package:public_issue_management/COMPANY/Workers/manage_workers.dart';
 import 'package:public_issue_management/COMPANY/TENDER/tender_manage.dart';
-import 'package:public_issue_management/COMPANY/view_task.dart';
 import 'package:public_issue_management/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +42,7 @@ class _DashboardState extends State<Dashboard> {
             onTap: () {
               if(title=='TenderManage'){
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TenderManage(),
+                  builder: (context) => ManageTender(),
                 ));
               }else if(title=='ManageWorkers'){
                 Navigator.of(context).push(MaterialPageRoute(

@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -72,7 +73,14 @@ Api api=Api();
       });
     }
 }
-
+  Future<void> _requestLocationPermission() async {
+    if (await Permission.location.request().isGranted) {
+      // Either the permission was already granted before or the user just granted it.
+      print("Location Permission is granted");
+    }else{
+      print("Location Permission is denied.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +205,12 @@ Api api=Api();
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Complaint(),
           ));
+
+          _requestLocationPermission();
         },
         tooltip: 'Add Complaints',
         child: const Icon(Icons.add),
-      ), 
+      ),
     );
 
   }

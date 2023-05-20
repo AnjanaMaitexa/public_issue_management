@@ -30,7 +30,7 @@ class _AddTenderState extends State<AddTender> {
   late String endDate;
 
   final _formKey = GlobalKey<FormState>();
-  List company = [];
+//  List company = [];
   String? selectedId;
   var dropDownValue;
   Future<void> getLogin() async {
@@ -39,7 +39,7 @@ class _AddTenderState extends State<AddTender> {
 
   }
 
-  Future getAllCompany()async{
+/*  Future getAllCompany()async{
     var res = await Api().getData('/signup/view-all-companies');
     var body = json.decode(res.body);
 
@@ -49,12 +49,12 @@ class _AddTenderState extends State<AddTender> {
       print('compans ${company}');
 
     });
-  }
+  }*/
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAllCompany();
+ //   getAllCompany();
     getLogin();
   }
   Future<void> _selectDate(BuildContext context) async {
@@ -91,7 +91,7 @@ class _AddTenderState extends State<AddTender> {
     });
 
     var data = {
-      "company_id":selectedId ,
+     // "company_id":selectedId ,
       "department_id":depart_id.replaceAll('"', '') ,
       "tender_name": nameTController.text,
       "job_start_date": startDate,
@@ -252,7 +252,7 @@ class _AddTenderState extends State<AddTender> {
                   SizedBox(
                     height: 10,
                   ),
-                  Padding(
+               /*   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: DropdownButtonFormField<String>(
                         decoration: InputDecoration(
@@ -277,7 +277,7 @@ class _AddTenderState extends State<AddTender> {
                             selectedId = type;
                           });
                         }),
-                  ),
+                  ),*/
 
 
 

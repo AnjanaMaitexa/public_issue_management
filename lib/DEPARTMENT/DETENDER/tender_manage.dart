@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:public_issue_management/DEPARTMENT/DETENDER/add_tender.dart';
 import 'package:public_issue_management/DEPARTMENT/DETENDER/tender_model.dart';
+import 'package:public_issue_management/DEPARTMENT/DETENDER/tender_reply.dart';
 import 'package:public_issue_management/DEPARTMENT/DETENDER/update_tender.dart';
 import 'package:public_issue_management/DEPARTMENT/dep_dashboard.dart';
 import 'package:public_issue_management/api.dart';
@@ -74,7 +75,6 @@ class _TenderManageState extends State<TenderManage> {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-
         appBar: AppBar(
           title: Text("ManageTender"),
           backgroundColor: Colors.lightBlueAccent,
@@ -91,12 +91,12 @@ class _TenderManageState extends State<TenderManage> {
                     shrinkWrap:true,
                     itemCount:  _loadedTender.length,
                     itemBuilder: (context,index){
+                      tender_id=_loadedTender[index]['_id'];
+                      prefs.setString('_id', tender_id.toString());
+                      print("tender ${tender_id}");
+
                       return GestureDetector(
                         onTap: ()async {
-                          tender_id=_loadedTender[index]['_id'];
-                          prefs = await SharedPreferences.getInstance();
-                          prefs.setString('_id', tender_id.toString());
-                             print("tender ${tender_id}");
 
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UpdateTender(),
@@ -140,7 +140,28 @@ class _TenderManageState extends State<TenderManage> {
                     },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          color: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TenderReply(),
+                ));
+
+              }, child: Text("TenderReply")),
+              ElevatedButton(onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AddTender(),
+                ));
+              }, child: Text("AddTender")),
+
+            ],
+          ),
+        ),
+      /*  floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddTender(),
@@ -148,7 +169,7 @@ class _TenderManageState extends State<TenderManage> {
           },
           tooltip: 'Add Tender',
           child: const Icon(Icons.add),
-        ),
+        ),*/
       ),
     );
   }

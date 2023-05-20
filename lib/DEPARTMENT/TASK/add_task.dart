@@ -184,7 +184,8 @@ class _DepartAddTaskState extends State<DepartAddTask> {
                       borderRadius: BorderRadius.circular(30)),
                   hintText: 'Task'),
             ),
-          ),   Row(
+          ),
+                Row(
 
             children: [
 

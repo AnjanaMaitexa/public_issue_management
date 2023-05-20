@@ -29,6 +29,7 @@ class _TenderManageState extends State<TenderManage> {
   String approve="1";
   String reject="0";
   String status="";
+  bool isExpanded = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -37,13 +38,13 @@ class _TenderManageState extends State<TenderManage> {
   }
 
   _fetchData() async {
-    prefs = await SharedPreferences.getInstance();
+    /*   prefs = await SharedPreferences.getInstance();
     
-    company_id = (prefs.getString('company_id') ?? '');
+  company_id = (prefs.getString('company_id') ?? '');
     print('login_company ${company_id}');
-
+*/
     var res = await Api()
-        .getData('/tender/company-view-tender/' +company_id.replaceAll('"', '') );
+        .getData('/tender/company-view-tender/'  );
     //  print(res);
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
@@ -164,99 +165,59 @@ class _TenderManageState extends State<TenderManage> {
                   itemCount: _loadedTender.length,
 
                   itemBuilder: (context,index){
-                    return GestureDetector(
-                      onTap:() async {
-                        tender_id=_loadedTender[index]['_id'];
-                        status=_loadedTender[index]['status'];
-                        prefs = await SharedPreferences.getInstance();
-                        prefs.setString('_id', tender_id.toString());
-                        //   print("worker ${_loadedWorkers[index]['_id']}");
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Wrap(
+                    tender_id=_loadedTender[index]['_id'];
+                    status=_loadedTender[index]['status'];
+                  /*  prefs = await SharedPreferences.getInstance();
+                    prefs.setString('_id', tender_id.toString());*/
+                    return Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment:CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 50,),
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
+                                Text(_loadedTender[index]['tender_name'],
+                                  style:TextStyle(
+                                    fontSize: 18,
+                                  ) ,),
+                                Text("StartDate:"+ _loadedTender[index]['job_start_date'],
+                                  style:TextStyle(
+                                    fontSize: 18,
+                                  ) ,),
+                                Text("EndDate:"+_loadedTender[index]['job_end_date'],
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                Text("Description:"+_loadedTender[index]['description'],
+                                    style:TextStyle(
+                                      fontSize: 18,
+                                    )),
 
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ElevatedButton(onPressed: (){
-                                        setState(() {
 
-                                          _acceptTender(tender_id);
-                                        });
-                                      },
-                                          child: Text("Accept")),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ElevatedButton(onPressed: (){
-                                        setState(() {
-                                          _rejectTender(tender_id);
-                                        });
-
-                                      },
-                                          child:Text("Reject")),
-                                    )
-                                  ],
-                                )
                               ],
-                            );
-                          },
-                        );
-
-                      },
-                      child: Card(
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  crossAxisAlignment:CrossAxisAlignment.start,
-                                  children: [
-                                    Text(_loadedTender[index]['tender_name'],
-                                      style:TextStyle(
-                                        fontSize: 18,
-                                      ) ,),
-                                    Text("StartDate:"+ _loadedTender[index]['job_start_date'],
-                                      style:TextStyle(
-                                        fontSize: 18,
-                                      ) ,),
-                                    Text("EndDate:"+_loadedTender[index]['job_end_date'],
-                                        style:TextStyle(
-                                          fontSize: 18,
-                                        )),
-                                    Text("Description:"+_loadedTender[index]['description'],
-                                        style:TextStyle(
-                                          fontSize: 18,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            /*  ElevatedButton(onPressed: (){
-                                setState(() {
-
-                                  _acceptTender(tender_id);
-                                });
-                              },
-                                  child: Text("Accept")),
-                              ElevatedButton(onPressed: (){
-                               setState(() {
-                                 _rejectTender(tender_id);
-                               });
-
-                              },
-                                  child: Text("Reject"))*/
-                            ],
+                            ),
 
                           ),
-                        ),
+
+                        /*  ElevatedButton(onPressed: (){
+                            setState(() {
+
+                              _acceptTender(tender_id);
+                            });
+                          },
+                              child: Text("Accept")),
+                          ElevatedButton(onPressed: (){
+                           setState(() {
+                             _rejectTender(tender_id);
+                           });
+
+                          },
+                              child: Text("Reject"))*/
+                        ],
+
                       ),
                     );
                   },
